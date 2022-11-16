@@ -1,0 +1,116 @@
+@import '~bootstrap/scss/bootstrap';
+
+.navbar {
+  height: 125px;
+  align-items: end;
+
+  @include media-breakpoint-down(xxl) {
+    height: 95px;
+  }
+
+  @include media-breakpoint-down(sm) {
+    align-items: unset;
+    height: auto;
+    padding: 28px 19px;
+  }
+
+  .container {
+    @include media-breakpoint-down(sm) {
+      padding: 0;
+    }
+  }
+
+  .navbar-toggler {
+    border: 0;
+
+    &:focus {
+      box-shadow: none;
+    }
+
+    @include media-breakpoint-down(sm) {
+      display: inline-block;
+    }
+  }
+
+  .collapse {
+    justify-content: end;
+
+    .navbar-nav {
+      align-items: center;
+
+      .nav-item {
+        .nav-link {
+          font-family: 'Roboto';
+          font-style: normal;
+          font-weight: 500;
+          font-size: 15px;
+          line-height: 18px;
+          color: #fff;
+          text-transform: uppercase;
+          margin: 0 10px;
+          padding: 10px 13px;
+          position: relative;
+
+          @include media-breakpoint-down(md) {
+            font-size: 13px;
+            line-height: 15px;
+          }
+
+          &::before {
+            content: '';
+            position: absolute;
+            background-color: #053E5C;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 4px;
+            transition: .3s;
+          }
+
+          &:hover,
+          &.active {
+            &::before {
+              width: 100%;
+            }
+          }
+        }
+
+        &:not(&.dropdown) {
+          @include media-breakpoint-down(sm) {
+            display: none;
+          }
+        }
+
+        &.dropdown {
+
+          .dropdown-toggle {
+            padding: 0;
+            margin-right: 0;
+
+            &::before {
+              display: none;
+            }
+
+            &::after {
+              display: none;
+            }
+
+            .user-image {
+              width: 53px;
+              height: 53px;
+              border-radius: 53px;
+              overflow: hidden;
+
+              .profile-image {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                object-position: center;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
