@@ -28,8 +28,13 @@ export class UserService {
       // check if token is valid else error
       // Set login status to true
       // Decode token and set the currentUser
+      if (!token) throw new Error("No token in storage");
+      this.isLogged.next(true);
+      this.currentUser.next(token);
+      console.log('si hay token')
       return true;
     } catch (error) {
+      console.log('fallo o no hay token', error); // Only for testing
       this.clearToken();
       return false;
     }
