@@ -1,0 +1,19 @@
+@import '~bootstrap/scss/bootstrap';
+
+#wrapper {
+  height: 100%;
+  display: grid;
+  grid-template-rows: max-content 1fr;
+
+  header {
+    padding-bottom: 63px;
+
+    @include media-breakpoint-down(xl) {
+      padding-bottom: 33px;
+    }
+
+    @include media-breakpoint-down(sm) {
+      padding-bottom: 0px;
+    }
+  }
+}
