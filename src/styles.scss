@@ -2,4 +2,34 @@
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+@import 'assets/scss/menu-styles.scss';
+@import 'assets/scss/font-declarations.scss';
+@import 'assets/scss/font-styles.scss';
 @import 'assets/scss/form-styles.scss';
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: #0C101B;
+  background-image: url("/assets/images/body-bg.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  background-attachment: fixed;
+}
+
+.offcanvas-backdrop,
+.offcanvas {
+  @include media-breakpoint-up(sm) {
+    display: none;
+  }
+}
+
+.offcanvas {
+  width: 100%;
+  max-width: 300px;
+  background-color: #042536;
+}
