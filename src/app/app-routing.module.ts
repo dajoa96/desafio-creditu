@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LoggedGuard } from './guards/logged.guard';
+import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [
   {
@@ -8,15 +10,18 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import("./modules/login/login.module").then(m => m.LoginModule)
+    loadChildren: () => import("./modules/login/login.module").then(m => m.LoginModule),
+    canActivate: [LoggedGuard]
   },
   {
     path: 'register',
-    loadChildren: () => import("./modules/register/register.module").then(m => m.RegisterModule)
+    loadChildren: () => import("./modules/register/register.module").then(m => m.RegisterModule),
+    canActivate: [LoggedGuard]
   },
   {
     path: 'users',
-    loadChildren: () => import("./modules/users/users.module").then(m => m.UsersModule)
+    loadChildren: () => import("./modules/users/users.module").then(m => m.UsersModule),
+    canActivate: [LoginGuard]
   },
   {
     path: '',
