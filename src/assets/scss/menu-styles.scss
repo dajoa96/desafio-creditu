@@ -1,0 +1,36 @@
+.custom-dropdown {
+  .dropdown-menu {
+    width: 200px;
+    margin: 0;
+    margin-top: 20px;
+    // overflow: hidden;
+    padding: 0;
+    margin-top: 38px!important;
+    transition: .3s;
+    display: block!important;
+    visibility: hidden;
+    opacity: 0;
+
+    &.dropdown-menu-end {
+      right: 0;
+
+      &::before {
+        content: "";
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 12px 12px 12px;
+        border-color: transparent transparent #ffffff transparent;
+        position: absolute;
+        top: -12px;
+        right: 13px;
+      }
+
+      &.show {
+        margin-top: 18px!important;
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+}
