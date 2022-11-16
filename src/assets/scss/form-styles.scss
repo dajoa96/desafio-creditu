@@ -1,0 +1,28 @@
+
+.invalid-feedback {
+  display: block;
+}
+
+.form-group__icon {
+  position: relative;
+
+  .form-control__has-icon {
+    padding-right: 35px;
+
+    &.is-invalid {
+      padding-right: 58px;
+    }
+
+    &.is-invalid+.form-control__icon {
+      right: 32px;
+    }
+  }
+
+  .form-control__icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+}
