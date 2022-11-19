@@ -33,3 +33,9 @@ body {
   max-width: 300px;
   background-color: #042536;
 }
+
+.vertically-centered {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
