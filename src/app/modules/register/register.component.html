@@ -1,7 +1,54 @@
 <section class="app-register">
-  <div class="container">
-    <div class="jumbotron">
-      <h1 class=""></h1>
-    </div>
+  <div class="text-center">
+    <h1>SING UP</h1>
+    <form [formGroup]="loginForm" (submit)="onSubmit()">
+      <div class="form-group m-2">
+       <input type="email" class="form-control" placeholder="Email" formControlName="email"
+          [ngClass]="{ 'is-invalid': isSubmitted && fc.email.errors }"
+       >
+      </div>
+     <div class="form-group invalid-feedback" *ngIf="isSubmitted && fc.email.errors">
+        <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.required">No colocaste el email</p>
+        <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.pattern">Email invalido</p>
+      </div>
+      <div class="form-group m-2">
+        <input type="username" class="form-control" placeholder="Username" formControlName="username"
+           [ngClass]="{ 'is-invalid': isSubmitted && fc.username.errors }"
+        >
+       </div>
+      <div class="form-group invalid-feedback" *ngIf="isSubmitted && fc.username.errors">
+         <p class="is-invalid" *ngIf="isSubmitted && fc.username.errors.required">No colocaste el username</p>
+         <p class="is-invalid" *ngIf="isSubmitted && fc.username.errors.minlength">El username muy corto</p>
+         <p class="is-invalid" *ngIf="isSubmitted && fc.username.errors.maxlength">El username muy largo</p>
+       </div>
+      <div class="form-group m-2">
+        <div class="form-group__icon">
+         <input type="password" class="form-control form-control__has-icon" placeholder="Password" formControlName="password"
+           [ngClass]="{ 'is-invalid': isSubmitted && fc.password.errors }"
+         >
+         <i class="fa-solid fa-eye form-control__icon"></i>
+       </div>
+     </div>
+     <div class="form-group invalid-feedback" *ngIf="isSubmitted && fc.password.errors">
+       <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.required">No colocaste el password</p>
+       <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.minlength">El password muy corto</p>
+       <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.maxlength">El password muy largo</p>
+     </div>
+     <div class="form-group m-2">
+      <div class="form-group__icon">
+       <input type="repeatPassword" class="form-control form-control__has-icon" placeholder="Repeat password" formControlName="repeatPassword"
+         [ngClass]="{ 'is-invalid': isSubmitted && fc.repeatPassword.errors }"
+       >
+       <i class="fa-solid fa-eye form-control__icon"></i>
+     </div>
+   </div>
+   <div class="form-group invalid-feedback" *ngIf="isSubmitted && fc.repeatPassword.errors">
+     <p class="is-invalid" *ngIf="isSubmitted && fc.repeatPassword.errors.required">El password no coincide</p>
+   </div>
+     <div>
+       <button type="submit" class="btn btn-primary">Login</button>
+     </div>
+   </form>
+   <a href="">Sing up</a>-<a href="">Reset Password</a>
   </div>
 </section>
