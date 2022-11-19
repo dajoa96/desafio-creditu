@@ -1,33 +1,41 @@
 <section class="app-login">
-  <div class="text-center">
-    <h1>LOGIN</h1>
-    <form [formGroup]="loginForm" (submit)="onSubmit()">
-      <div class="form-group m-2">
-       <input type="email" class="form-control" placeholder="Email" formControlName="email"
-          [ngClass]="{ 'is-invalid': isSubmitted && fc.email.errors }"
-       >
-      </div>
-     <div class="form-group invalid-feedback" *ngIf="isSubmitted && fc.email.errors">
-        <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.required">No colocaste el email</p>
-        <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.pattern">Email invalido</p>
-      </div>
-      <div class="form-group m-2">
-        <div class="form-group__icon">
-         <input type="password" class="form-control form-control__has-icon" placeholder="Password" formControlName="password"
-           [ngClass]="{ 'is-invalid': isSubmitted && fc.password.errors }"
-         >
-         <i class="fa-solid fa-eye form-control__icon"></i>
-       </div>
-     </div>
-     <div class="form-group invalid-feedback" *ngIf="isSubmitted && fc.password.errors">
-       <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.required">No colocaste el password</p>
-       <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.minlength">El password muy corto</p>
-       <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.maxlength">El password muy largo</p>
-     </div>
-     <div>
-       <button type="submit" class="btn btn-primary">Login</button>
-     </div>
-   </form>
-   <a href="">Sing up</a>-<a href="">Reset Password</a>
+  <div class="container">
+    <div class="form__wrapper">
+      <h1 class="title">Login</h1>
+      <form [formGroup]="loginForm" (submit)="onSubmit()">
+        <div class="form-group mb-2">
+          <input type="email" class="form-control" placeholder="Email" formControlName="email"
+            [ngClass]="{ 'is-invalid': isSubmitted && fc.email.errors }"
+          >
+          <div class="invalid-feedback" *ngIf="isSubmitted && fc.email.errors">
+            <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.required">Email is required</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.pattern">Invalid Email</p>
+          </div>
+        </div>
+        <div class="form-group mb-2">
+          <div class="form-group__icon">
+            <input [type]="showPassword ? 'text' : 'password'" class="form-control form-control__has-icon" placeholder="Password" formControlName="password"
+              [ngClass]="{ 'is-invalid': isSubmitted && fc.password.errors }"
+            >
+            <i class="fa-solid form-control__icon"
+              [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+              (click)="showPassword = !showPassword"
+            ></i>
+          </div>
+          <div class="invalid-feedback" *ngIf="isSubmitted && fc.password.errors">
+            <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.required">Password is required</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.minlength">Password is too short</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.maxlength">Password is too long</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+        <div class="invalid-feedback" *ngIf="isSubmitted && errorMessage !== ''">
+          <p class="is-invalid">{{ errorMessage }}</p>
+        </div>
+      </form>
+      <a routerLink="/register">Sing up</a> - <a routerLink="/login/reset-password">Reset Password</a>
+    </div>
   </div>
 </section>
