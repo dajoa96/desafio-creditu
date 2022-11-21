@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   api: {
-    link: 'https://kraken-race-client-proxy.herokuapp.com/api'
+    link: 'https://kraken-race-client-proxy.herokuapp.com'
   }
 };
 
