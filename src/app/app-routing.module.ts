@@ -9,6 +9,10 @@ const routes: Routes = [
     loadChildren: () => import("./modules/home/home.module").then(m => m.HomeModule)
   },
   {
+    path: 'search',
+    loadChildren: () => import("./modules/search/search.module").then(m => m.SearchModule)
+  },
+  {
     path: 'login',
     loadChildren: () => import("./modules/login/login.module").then(m => m.LoginModule),
     canActivate: [LoggedGuard]
