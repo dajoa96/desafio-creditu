@@ -1,0 +1,52 @@
+.app-users {
+  .btn {
+    display: inline;
+    width: 50%;
+  }
+
+  .avatar-image {
+    width: 140px;
+    height: 140px;
+    display: inline-block;
+    overflow: hidden;
+    border-radius: 100px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  .nav-link.active {
+    background-color: #21536D;
+    border-radius: 21px;
+    height: 100%;
+  }
+
+  .nav-item {
+    background-color: white;
+    margin: 10px;
+    border-radius: 25px;
+    width: 100px;
+    height: 100px;
+    .nav-link {
+      height: 100%;
+    }
+  }
+
+  .row {
+    --bs-gutter-x: -3.5rem;
+  }
+
+  .nav-pills {
+   img {
+    margin-top: 10px;
+   }
+  }
+
+  .form__wrapper {
+    background-image: linear-gradient(to bottom, #21536D 20%, #042536 0%);
+  }
+}

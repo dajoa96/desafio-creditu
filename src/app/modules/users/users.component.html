@@ -1,1 +1,70 @@
-<p>users works!</p>
+<section class="app-users">
+  <div class="container">
+    <div class="form__wrapper">
+      <div class="avatar-image">
+        <img src="/assets/images/user/user-placeholder.jpg" alt="">
+      </div>
+      <div class="row">
+        <div class="col mb-3 mt-3">
+          <img src="/assets/images/user/trofeo.png" width="35" alt="">
+          <h6>1000 PTS</h6>
+        </div>
+        <div class="col mb-3 mt-3">
+          <img src="/assets/images/user/win.png" width="35" alt="">
+          <h6>50 WIN</h6>
+        </div>
+        <div class="col mb-3 mt-3">
+          <img src="/assets/images/user/loss.png" width="35" alt="">
+          <h6>10 LOSSES</h6>
+        </div>
+      </div>
+      <div>
+        <ul ngbNav #nav="ngbNav" class="nav-pills nav-justified">
+          <li ngbNavItem>
+            <a ngbNavLink><img src="/assets/images/user/rally.png" alt=""></a>
+            <ng-template ngbNavContent>
+            </ng-template>
+          </li>
+          <li ngbNavItem>
+            <a ngbNavLink><img src="/assets/images/user/f1.png" alt=""></a>
+            <ng-template ngbNavContent>
+            </ng-template>
+          </li>
+          <li ngbNavItem>
+            <a ngbNavLink><img src="/assets/images/user/rally.png" alt=""></a>
+            <ng-template ngbNavContent>
+            </ng-template>
+          </li>
+        </ul>
+      </div>
+      <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      <form [formGroup]="loginForm" (submit)="onSubmit()">
+        <div class="form-group mb-2">
+          <input type="email" class="form-control" placeholder="Email" formControlName="email"
+            [ngClass]="{ 'is-invalid': isSubmitted && fc.email.errors }"
+          >
+          <div class="invalid-feedback" *ngIf="isSubmitted && fc.email.errors">
+            <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.required">Email is required</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.pattern">Invalid Email</p>
+          </div>
+        </div>
+        <div class="form-group mb-2">
+          <input type="text" class="form-control" placeholder="Nickname" formControlName="nickname"
+            [ngClass]="{ 'is-invalid': isSubmitted && fc.nickname.errors }"
+          >
+          <div class="invalid-feedback" *ngIf="isSubmitted && fc.nickname.errors">
+            <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.required">Nickname is required</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.minlength">Nickname is too short</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.maxlength">Nickname is too long</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+        <div class="invalid-feedback" *ngIf="isSubmitted && errorMessage === ''">
+          <p class="is-invalid">{{ errorMessage }}</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
