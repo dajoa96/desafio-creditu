@@ -1,0 +1,131 @@
+<div class="search__wrapper" *ngIf="showTopSearch">
+  <app-search-dropdown
+    [filters]="filters"
+    (onNewSearch)="onNewSearchHandler($event)"
+  ></app-search-dropdown>
+</div>
+<div class="table__wrapper" [ngClass]="{ 'has-top-search-bar': showTopSearch, 'has-hall-of-fame': showHallOfFame && !showLoader && currentPage === 1 && list && list.length > 0 }">
+  <div class="hall-of-fame" *ngIf="showHallOfFame && !showLoader && currentPage === 1 && list && list.length > 0">
+    <ng-container *ngFor="let item of list | slice:0:3 ; let i = index">
+      <div class="top-player"
+        [ngClass]="{ 'first-place': i === 0, 'second-place': i === 1, 'third-place': i === 2 }"
+      >
+        <div class="player-image">
+          <img [src]="item?.avatar || '/assets/images/user/user-placeholder.jpg'" [alt]="item?.nickname || 'Player Image'" class="img-fluid">
+        </div>
+        <div class="figure">
+          <div class="nickname">{{ item?.nickname }}</div>
+          <div class="player-position">{{ item?.ranking }}</div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="table-responsive__wrapper">
+    <ng-container *ngIf="showLoader">
+      <div class="table-loader">
+        <div class="spinner-border" role="status"></div>
+        <span class="text-center">Loading...</span>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!showLoader">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <th>Avatar</th>
+            <th>Nickname</th>
+            <th>Game Type</th>
+            <th>Ranking</th>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="!list">
+              <tr class="no-data">
+                <td colspan="4">There are no players to show!</td>
+              </tr>
+            </ng-container>
+            <ng-container *ngIf="list && !list?.length">
+              <tr class="no-data no-results">
+                <td colspan="4">Results not Found!</td>
+              </tr>
+            </ng-container>
+            <ng-container *ngIf="showHallOfFame && currentPage === 1">
+              <ng-container *ngIf="list && list.length > 3">
+                <tr *ngFor="let item of list | slice:3:pageSize">
+                  <td>
+                    <div class="player-image">
+                      <img [src]="item?.avatar || '/assets/images/user/user-placeholder.jpg'" [alt]="item?.nickname || 'Player Image'" class="img-fluid">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="player-nickname">
+                      {{ item?.nickname }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="player-category">
+                      {{ item?.gameType }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="player-ranking">
+                      {{ item?.ranking }}
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+              <ng-container *ngIf="list && list.length && list.length <= 3">
+                <tr class="no-data no-results">
+                  <td colspan="4">Nothing to show over here, look up above!</td>
+                </tr>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="!showHallOfFame || currentPage > 1">
+              <tr *ngFor="let item of list">
+                <td>
+                  <div class="player-image">
+                    <img [src]="item?.avatar || '/assets/images/user/user-placeholder.jpg'" [alt]="item?.nickname || 'Player Image'" class="img-fluid">
+                  </div>
+                </td>
+                <td>
+                  <div class="player-nickname">
+                    {{ item?.nickname }}
+                  </div>
+                </td>
+                <td>
+                  <div class="player-category">
+                    {{ item?.gameType }}
+                  </div>
+                </td>
+                <td>
+                  <div class="player-ranking">
+                    {{ item?.ranking }}
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <div class="footer-navigation" *ngIf="showBottomPagination">
+        <div class="pagination__wrapper">
+          <div class="pagination-numbers">
+            <span class="current-page">
+              {{currentPage}}
+            </span>
+            <span class="separator">/</span>
+            <span class="total-pages">
+              {{totalPages}}
+            </span>
+          </div>
+          <ngb-pagination [collectionSize]="totalElements" [(page)]="currentPage">
+            <ng-template ngbPaginationPrevious>
+              <i class="fa-solid fa-caret-left"></i>
+            </ng-template>
+            <ng-template ngbPaginationNext>
+              <i class="fa-solid fa-caret-right"></i>
+            </ng-template>
+          </ngb-pagination>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
