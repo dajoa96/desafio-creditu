@@ -20,5 +20,10 @@
   main {
     padding-top: 20px;
     padding-bottom: 75px;
+
+    @include media-breakpoint-down(md) {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
   }
 }
