@@ -1,4 +1,5 @@
 @import '~bootstrap/scss/bootstrap-grid';
+// @import '../../assets/scss/form-styles.scss';
 
 .invalid-feedback {
   display: block;
@@ -76,6 +77,13 @@
 
   &::placeholder {
     color: #B6B6B6;
+  }
+}
+
+.form-control {
+  &:focus {
+    border-color: #053e5c;
+    box-shadow: 0 0 0 0.25rem rgb(5 62 92 / 60%);
   }
 }
 

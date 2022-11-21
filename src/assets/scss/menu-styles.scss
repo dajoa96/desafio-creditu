@@ -1,18 +1,18 @@
 .custom-dropdown {
   .dropdown-menu {
     width: 200px;
-    margin: 0;
-    margin-top: 20px;
-    // overflow: hidden;
+    padding: 0!important;
+    margin: 0!important;
     padding: 0;
-    margin-top: 38px!important;
     transition: .3s;
     display: block!important;
     visibility: hidden;
     opacity: 0;
+    pointer-events: none;
 
     &.dropdown-menu-end {
       right: 0;
+      top: 0;
 
       &::before {
         content: "";
@@ -27,9 +27,17 @@
       }
 
       &.show {
+        pointer-events: unset;
         margin-top: 18px!important;
         visibility: visible;
         opacity: 1;
+      }
+    }
+
+    li {
+      .dropdown-item {
+        padding: 15px;
+        cursor: pointer;
       }
     }
   }
