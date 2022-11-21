@@ -1,0 +1,50 @@
+@import '~bootstrap/scss/bootstrap';
+@import '../../../../assets/scss/form-styles.scss';
+
+.search-dropdown {
+  form {
+    display: flex;
+    grid-gap: 3px;
+    gap: 3px;
+
+    .form-group__icon {
+      width: 100%;
+
+      .form-control {
+        padding-right: 65px;
+
+        @include media-breakpoint-down(md) {
+          padding-right: 40px;
+        }
+      }
+
+      .form-control__icon {
+        right: 25px;
+        color: #21536D;
+        font-size: 29px;
+
+        @include media-breakpoint-down(md) {
+          right: 10px;
+          font-size: 22px;
+        }
+      }
+    }
+
+    .dropdown {
+      .dropdown-toggle {
+        width: 210px;
+        display: flex;
+        align-items: center;
+        z-index: 999;
+
+        &::after {
+          margin-left: auto;
+        }
+
+        .dropdown-menu {
+          z-index: 9;
+        }
+      }
+    }
+  }
+}
