@@ -91,6 +91,7 @@
   display: block;
   width: 100%;
   transition: .3s;
+  border-radius: 50px;
 
   &:disabled {
     cursor: not-allowed;
