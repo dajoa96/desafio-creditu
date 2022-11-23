@@ -31,11 +31,6 @@ export class SearchDropdownComponent implements OnInit {
   onSearch() {
     const search: any = this.searchForm.get('gameType')?.value ? this.searchForm.value : { search: this.searchForm.get('search')?.value };
     this.router.navigate(['/search'], { queryParams: search });
-    // if (this.redirectOnSearch && !this.router.url.includes('/search')) {
-    //   return;
-    // } else {
-    //   this.onNewSearch.emit(search);
-    // }
   }
 
   onSelect(val: any) {
