@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { SearchFilterModel } from 'src/app/models/search-filter.model';
 
 @Component({
@@ -6,8 +7,8 @@ import { SearchFilterModel } from 'src/app/models/search-filter.model';
   templateUrl: './player-pager.component.html',
   styleUrls: ['./player-pager.component.scss']
 })
-export class PlayerPagerComponent implements OnInit {
-  @Input('data') data?: any;
+export class PlayerPagerComponent implements OnInit, OnDestroy {
+  @Input('data') data?: Observable<any>;
   @Input('showHallOfFame') showHallOfFame: boolean = false;
   @Input('showBottomPagination') showBottomPagination: boolean = false;
   @Input('showTopSearch') showTopSearch: boolean = false;
@@ -35,22 +36,37 @@ export class PlayerPagerComponent implements OnInit {
       value: 'rally-racing'
     }
   ];
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor() { }
 
   ngOnInit(): void {
-    this.list = this.setDataHOF();
+    this.data?.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (res) => {
+        if (res) this.list = this.setDataHOF(res);
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+    // this.list = this.setDataHOF();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   //Method used to map the data according to the ranking, this is used to not access directly to the property data.list
-  setDataHOF(): any[] | undefined {
+  setDataHOF(data: any): any[] | undefined {
     try {
-      if (!this.data?.list) return;                                                 //if the data list is undefined return undefined
-      if (!this.data?.list?.length) return [];                                      //If the data list is an empty array return another empty array
-      this.currentPage = this.data?.pagination?.currentPage || 0;
-      this.totalElements = this.data?.pagination?.totalElements || 0;
+      console.log(data);
+      if (!data?.list) return;                                                      //if the data list is undefined return undefined
+      if (!data?.list?.length) return [];                                           //If the data list is an empty array return another empty array
+      this.currentPage = data?.pagination?.currentPage || 0;
+      this.totalElements = data?.pagination?.totalElements || 0;
       this.totalPages = Math.ceil(this.totalElements / this.pageSize);
-      const l = this.data?.list.slice(0, this.pageSize);                            //We make sure there are only as many elements as required by the pageSize: 10 by default
+      const l = data?.list.slice(0, this.pageSize);                                 //We make sure there are only as many elements as required by the pageSize: 10 by default
       return l.map((d: any, i: number) => {
         return {
           ...d,
