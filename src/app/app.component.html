@@ -6,3 +6,14 @@
     <router-outlet></router-outlet>
   </main>
 </div>
+<ngx-spinner
+  bdColor = "rgba(0, 0, 0, 0.8)"
+  size = "medium"
+  color = "#fff"
+  type = "ball-spin-clockwise"
+  [fullScreen] = "true"
+  [zIndex]="99999999"
+>
+  <p class="title text-center">Loading... </p>
+</ngx-spinner>
+<notifier-container></notifier-container>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from './services/user.service';
 
 @Component({
@@ -7,10 +8,10 @@ import { UserService } from './services/user.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'desafio-creditu';
 
   constructor(
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly spinner: NgxSpinnerService
   ) {
 
   }
