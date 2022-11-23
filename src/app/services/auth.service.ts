@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { CheckEmailRequestModel, CheckNicknameRequestModel, LoginRequestModel, SignUpRequestModel } from '../models/user-requests.model';
+import { CheckEmailRequestModel, CheckNicknameRequestModel, LoginRequestModel, RegisterRequestModel } from '../models/user-requests.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/users/checkNickname`, nickname);
   }
 
-  signUp(user: SignUpRequestModel): Observable<any> {
+  signUp(user: RegisterRequestModel): Observable<any> {
     return this.http.post(`${this.API_URL}/users/singUp`, user);
   }
 
