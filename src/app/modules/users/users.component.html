@@ -1,37 +1,43 @@
 <section class="app-users">
   <div class="container">
     <div class="form__wrapper">
+      <div class="">
+        <i class="fa-solid fa-trash-can"></i>
+      </div>
       <div class="avatar-image">
         <img src="/assets/images/user/user-placeholder.jpg" alt="">
       </div>
       <div class="row">
         <div class="col mb-3 mt-3">
           <img src="/assets/images/user/trofeo.png" width="35" alt="">
-          <h6>1000 PTS</h6>
+          <p class="p__form">1000 PTS</p>
         </div>
         <div class="col mb-3 mt-3">
           <img src="/assets/images/user/win.png" width="35" alt="">
-          <h6>50 WIN</h6>
+          <p class="p__form">50 WIN</p>
         </div>
         <div class="col mb-3 mt-3">
           <img src="/assets/images/user/loss.png" width="35" alt="">
-          <h6>10 LOSSES</h6>
+          <p class="p__form">10 DEFEATS</p>
         </div>
       </div>
       <div>
-        <ul ngbNav #nav="ngbNav" class="nav-pills nav-justified">
+        <ul ngbNav #nav="ngbNav" class="nav-pills nav-justified mb-5">
           <li ngbNavItem>
             <a ngbNavLink><img src="/assets/images/user/rally.png" alt=""></a>
+            <p class="p__form">Sport</p>
             <ng-template ngbNavContent>
             </ng-template>
           </li>
           <li ngbNavItem>
             <a ngbNavLink><img src="/assets/images/user/f1.png" alt=""></a>
+            <p class="p__form">Formula 1</p>
             <ng-template ngbNavContent>
             </ng-template>
           </li>
           <li ngbNavItem>
             <a ngbNavLink><img src="/assets/images/user/rally.png" alt=""></a>
+            <p class="p__form">Rally</p>
             <ng-template ngbNavContent>
             </ng-template>
           </li>
@@ -56,6 +62,37 @@
             <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.required">Nickname is required</p>
             <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.minlength">Nickname is too short</p>
             <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.maxlength">Nickname is too long</p>
+          </div>
+        </div>
+        <p class="p__locate">Change password</p>
+        <div class="form-group mb-2">
+          <div class="form-group__icon">
+            <input [type]="showPassword ? 'text' : 'password'" class="form-control form-control__has-icon" placeholder="New password" formControlName="password"
+              [ngClass]="{ 'is-invalid': isSubmitted && fc.password.errors }"
+            >
+            <i class="fa-solid form-control__icon"
+              [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+              (click)="showPassword = !showPassword"
+            ></i>
+          </div>
+          <div class="invalid-feedback" *ngIf="isSubmitted && fc.password.errors">
+            <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.minlength">Password is too short</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.maxlength">Password is too long</p>
+          </div>
+        </div>
+        <div class="form-group mb-2">
+          <div class="form-group__icon">
+            <input [type]="showRepeatPassword ? 'text' : 'password'" class="form-control form-control__has-icon" placeholder="Repeat password" formControlName="repeatPassword"
+              [ngClass]="{ 'is-invalid': isSubmitted && fc.repeatPassword.errors }"
+            >
+            <i class="fa-solid form-control__icon"
+              [ngClass]="showRepeatPassword ? 'fa-eye-slash' : 'fa-eye'"
+              (click)="showRepeatPassword = !showRepeatPassword"
+            ></i>
+          </div>
+          <div class="invalid-feedback" *ngIf="isSubmitted && fc.repeatPassword.errors">
+            <p class="is-invalid" *ngIf="isSubmitted && fc.repeatPassword.errors.required">You must confirm the Password</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.repeatPassword.errors.mustMatch">Passwords don't match</p>
           </div>
         </div>
         <div class="form-group">

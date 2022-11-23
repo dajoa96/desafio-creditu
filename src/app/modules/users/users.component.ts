@@ -5,6 +5,7 @@ import { first } from 'rxjs';
 import { LoginRequestModel } from 'src/app/models/user-requests.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
+import { MustMatch } from 'src/app/shared/validators/must-match-validator';
 
 @Component({
   selector: 'app-users',
@@ -14,6 +15,8 @@ import { UserService } from 'src/app/services/user.service';
 export class UsersComponent implements OnInit {
   loginForm: FormGroup;
   isSubmitted: boolean = false;
+  showPassword: boolean = false;
+  showRepeatPassword: boolean = false;
   errorMessage: string = '';
 
   constructor(
@@ -24,8 +27,14 @@ export class UsersComponent implements OnInit {
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)]],
-      nickname: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(32)]]
-    });
+      nickname: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
+      password: ['', [Validators.minLength(4), Validators.maxLength(32)]],
+      repeatPassword: ['', []]
+    },
+    {
+      validator: MustMatch('password', 'repeatPassword')    //this validator is separated due to beign more rehusable, as it can be used with any form controls
+    }
+    );
   }
 
   ngOnInit(): void {

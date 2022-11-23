@@ -47,6 +47,17 @@
   }
 
   .form__wrapper {
-    background-image: linear-gradient(to bottom, #21536D 20%, #042536 0%);
+    background-image: linear-gradient(to bottom, #21536D 140px, #042536 0%);
+  }
+
+  .p__locate {
+    display: flex;
+    font-size: 12px;
+    margin-top: 35px;
+    margin-bottom: 0px;
+  }
+
+  .p__form {
+    font-size: 12px;
   }
 }
