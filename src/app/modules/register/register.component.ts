@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NotifierService } from 'angular-notifier';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { first, throwError } from 'rxjs';
+import { RegisterRequestModel } from 'src/app/models/user-requests.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
+import { EmailIsTaken } from 'src/app/shared/validators/email-is-taken.validator';
 import { MustMatch } from 'src/app/shared/validators/must-match-validator';
 
 @Component({
@@ -10,7 +16,7 @@ import { MustMatch } from 'src/app/shared/validators/must-match-validator';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  loginForm: FormGroup;
+  registerForm: FormGroup;
   isSubmitted: boolean = false;
   showPassword: boolean = false;
   showRepeatPassword: boolean = false;
@@ -18,12 +24,23 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly userService: UserService,     //Only for Testing
-    private readonly router: Router                //Only for Testing
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+    private readonly spinner: NgxSpinnerService,
+    private readonly router: Router,
+    private readonly notifierService: NotifierService
   ) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)]],
-      nickname: ['',[Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
+    this.registerForm = this.fb.group({
+      email: [
+        '',
+        [Validators.required, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)],
+        [this.userService.validateEmail.bind(this.userService)]
+      ],
+      nickname: [
+        '',
+        [Validators.required, Validators.minLength(4), Validators.maxLength(32)],
+        [this.userService.validateNickname.bind(this.userService)]
+      ],
       password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
       repeatPassword: ['', [Validators.required]]
     },
@@ -38,17 +55,50 @@ export class RegisterComponent implements OnInit {
 
   //Helper to access the form's controls
   get fc(): any {
-    return this.loginForm.controls;
+    return this.registerForm.controls;
   }
 
   onSubmit(): void {
     //We confirm the user has tried to submit the form
     this.isSubmitted = true;
     //Only if the form is valid, we submit
-    if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-      this.userService.setToken(JSON.stringify(this.loginForm.value));         //Only for Testing
-      if (this.userService.checkToken()) this.router.navigate(['/home'])       //Only for Testing
+    if (this.registerForm.valid) {
+      const data: RegisterRequestModel = {
+        email: this.registerForm.get('email')?.value,
+        nickname: this.registerForm.get('nickname')?.value,
+        password: this.registerForm.get('password')?.value
+      }
+      console.log(data);
+      this.spinner.show();
+      this.authService.signUp(data).pipe(first()).subscribe({
+        next: (res) => {
+          console.log(res);
+          try {
+            if (res.status.toLowerCase() != 'success') {
+              if (res.error == "duplicated-email") throw new Error("Email is already taken");
+              if (res.error == "duplicated-email") throw new Error("Nickname is already taken");
+              throw new Error("An unknown error has ocurred, please try again");
+            } else {
+              this.notifierService.notify('success', 'You have successfully Signed Up, please Login to access Racing Cars!');
+              this.router.navigate(['/login']);
+              this.spinner.hide();
+            }
+          } catch (error: any) {
+            this.errorHandler(error.message || error);
+          }
+        },
+        error: (err) => {
+          console.log(err);
+          this.errorHandler();
+        }
+      });
+      // this.userService.setToken(JSON.stringify(this.registerForm.value));         //Only for Testing
+      // if (this.userService.checkToken()) this.router.navigate(['/home'])       //Only for Testing
     }
+  }
+
+  errorHandler(message?: string) {
+    this.spinner.hide();
+    this.errorMessage = message || "An error has ocurred, please try again";
   }
 }

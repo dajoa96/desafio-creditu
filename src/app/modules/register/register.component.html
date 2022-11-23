@@ -2,7 +2,7 @@
   <div class="container">
     <div class="form__wrapper">
       <h1 class="title">Sign Up</h1>
-      <form [formGroup]="loginForm" (submit)="onSubmit()">
+      <form [formGroup]="registerForm" (submit)="onSubmit()">
         <div class="form-group mb-2">
           <input type="email" class="form-control" placeholder="Email" formControlName="email"
             [ngClass]="{ 'is-invalid': isSubmitted && fc.email.errors }"
@@ -10,6 +10,8 @@
           <div class="invalid-feedback" *ngIf="isSubmitted && fc.email.errors">
             <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.required">Email is required</p>
             <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.pattern">Invalid Email</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.emailIsTaken">Email is already taken</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.emailIsTakenError">Error validating Email</p>
           </div>
         </div>
         <div class="form-group mb-2">
@@ -20,6 +22,8 @@
             <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.required">Nickname is required</p>
             <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.minlength">Nickname is too short</p>
             <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.maxlength">Nickname is too long</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.nicknameIsTaken">Nickname is already taken</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.nicknameIsTakenError">Error validating Nickname</p>
           </div>
         </div>
         <div class="form-group mb-2">
@@ -56,7 +60,7 @@
         <div class="form-group">
           <button type="submit" class="btn btn-primary">Sign Up</button>
         </div>
-        <div class="invalid-feedback" *ngIf="isSubmitted && errorMessage === ''">
+        <div class="invalid-feedback" *ngIf="isSubmitted && errorMessage !== ''">
           <p class="is-invalid">{{ errorMessage }}</p>
         </div>
       </form>
