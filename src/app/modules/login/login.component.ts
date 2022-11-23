@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { first } from 'rxjs';
 import { LoginRequestModel } from 'src/app/models/user-requests.model';
 import { AuthService } from 'src/app/services/auth.service';
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
     private readonly userService: UserService,     //Only for Testing
+    private readonly spinner: NgxSpinnerService,
     private readonly router: Router,               //Only for Testing
   ) {
     this.loginForm = this.fb.group({
@@ -43,29 +45,35 @@ export class LoginComponent implements OnInit {
     this.isSubmitted = true;
     //Only if the form is valid, we submit
     if (this.loginForm.valid) {
+      this.spinner.show();
       console.log(this.loginForm.value);
-      const data: LoginRequestModel = {
-        email: this.loginForm.value.email,
-        password: this.loginForm.value.password
-      }
-      this.authService.login(data).pipe(first()).subscribe({
+      this.authService.login(this.loginForm.value).pipe(first()).subscribe({
         next: (res) => {
           console.log(res);
+          try {
+            if (res.status.toLowerCase() != 'success') {
+              if (res.error == "invalid-email" || res.error == "invalid-password") throw new Error("Invalid Email and/or Password");
+              throw new Error("An unknown error has ocurred, please try again");
+            } else {
+              if (!res.data.token || res.data.token === '') throw new Error("An error has ocurred, please try again");
+              if (!this.userService.setToken(res.data.token) || !this.userService.checkToken()) throw new Error("An error has ocurred, please try again");
+              this.spinner.hide();
+              this.router.navigate(['/home']);
+            }
+          } catch (error: any) {
+            this.errorHandler(error.message || error);
+          }
         },
         error: (err) => {
           console.log(err);
-          switch(err.status) {
-            case 404:
-              this.errorMessage = 'The User/Password is incorret'
-            break;
-            default:
-              this.errorMessage = 'An error has ocurred'
-            break;
-          }
+          this.errorHandler();
         }
       });
-      // this.userService.setToken(JSON.stringify(this.loginForm.value));         //Only for Testing
-      // if (this.userService.checkToken()) this.router.navigate(['/home'])       //Only for Testing
     }
+  }
+
+  errorHandler(message?: string) {
+    this.spinner.hide();
+    this.errorMessage = message || "An error has ocurred, please try again";
   }
 }
