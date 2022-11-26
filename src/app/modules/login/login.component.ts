@@ -57,8 +57,8 @@ export class LoginComponent implements OnInit {
             } else {
               if (!res.data.token || res.data.token === '') throw new Error("An error has ocurred, please try again");
               if (!this.userService.setToken(res.data.token) || !this.userService.checkToken()) throw new Error("An error has ocurred, please try again");
-              this.spinner.hide();
               this.router.navigate(['/home']);
+              this.spinner.hide();
             }
           } catch (error: any) {
             this.errorHandler(error.message || error);
