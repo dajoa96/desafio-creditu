@@ -1,1 +1,18 @@
-<p>sidebar works!</p>
+<div class="sidebar">
+  <ul class="sidebar-list">
+    <li class="sidebar-item">
+      <a class="sidebar-link" routerLink="/home" routerLinkActive="active" (click)="onClose()">Home</a>
+    </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" routerLink="/about" routerLinkActive="active" (click)="onClose()">About</a>
+    </li>
+    <ng-container *ngIf="!isLogged || !currentUser">
+      <li class="sidebar-item">
+        <a class="sidebar-link" routerLink="/login" routerLinkActive="active" (click)="onClose()">Login</a>
+      </li>
+      <li class="sidebar-item">
+        <a class="sidebar-link" routerLink="/register" routerLinkActive="active" (click)="onClose()">Register</a>
+      </li>
+    </ng-container>
+  </ul>
+</div>
