@@ -69,6 +69,7 @@ export class UserService {
     return this.authService.checkEmail({ email: control.value }).pipe(
       map(res => {
         try {
+          if (control.pristine) return null;
           if (res.code === 200 && res.statusMsg === "email-available") return null;                              //If nickname is available
           if (res.code === 200 && res.statusMsg === "duplicated-email") return { emailIsTaken: true };           //If nickname is taken
           throw new Error("Error");
@@ -84,6 +85,7 @@ export class UserService {
     return this.authService.checkNickname({ nickname: control.value }).pipe(
       map(res => {
         try {
+          if (control.pristine) return null;
           if (res.code === 200 && res.statusMsg === "nickname-available") return null;                           //If nickname is available
           if (res.code === 200 && res.statusMsg === "duplicated-nickname") return { nicknameIsTaken: true };     //If nickname is taken
           throw new Error("Error");
@@ -97,5 +99,9 @@ export class UserService {
   //Find top ten players in the ranking
   getTopRanking(): Observable<any> {
     return this.http.post(`${this.API_URL}/users/getRanking`, null);
+  }
+
+  getUsers(params: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/users/findUsers`, params);
   }
 }
