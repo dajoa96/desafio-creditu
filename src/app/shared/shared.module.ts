@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PlayerPagerComponent } from './pager/player-pager/player-pager.component';
 import { SearchDropdownComponent } from './search/search-dropdown/search-dropdown.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CheckDialogModalComponent } from './modal/check-dialog-modal/check-dialog-modal.component';
 
 
 
@@ -15,7 +16,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     HeaderComponent,
     SidebarComponent,
     PlayerPagerComponent,
-    SearchDropdownComponent
+    SearchDropdownComponent,
+    CheckDialogModalComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     HeaderComponent,
     SidebarComponent,
     PlayerPagerComponent,
-    SearchDropdownComponent
+    SearchDropdownComponent,
+    CheckDialogModalComponent
   ]
 })
 export class SharedModule { }
