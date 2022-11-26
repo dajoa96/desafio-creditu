@@ -15,10 +15,11 @@ export class ResetPasswordComponent implements OnInit {
   resetPasswordForm: FormGroup;
   tokenIsExpired: boolean = false;
   isSubmitted: boolean = false;
-  submitted: boolean = false;
+  isSent: boolean = false;
   showPassword: boolean = false;
   showRepeatPassword: boolean = false;
   token?: any | null;
+  decodedToken?: any | null;
   errorMessage?: string;
   paramsSub$?: Subscription;
   params?: ParamMap;
@@ -53,7 +54,9 @@ export class ResetPasswordComponent implements OnInit {
     try {
       this.tokenIsExpired = false;
       this.token = this.route.snapshot.queryParamMap.get('token');
+      this.token = "true"
       if (this.token && this.token != "" && this.jwtHelper.isTokenExpired(this.token)) {
+        this.decodedToken = this.jwtHelper.decodeToken(this.token);
         this.tokenIsExpired = true;
         this.errorMessage = "The recovery token has expired";
       }
