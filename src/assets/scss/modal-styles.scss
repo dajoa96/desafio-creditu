@@ -1,0 +1,42 @@
+.modal {
+  .modal-content {
+    background-color: #042536;
+
+    .modal-header {
+      border: 0;
+      padding-bottom: 0;
+
+      .modal-title {
+        font-size: 48px;
+        line-height: 50px;
+      }
+
+      .btn-close {
+        background: transparent;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 40px;
+        line-height: 0;
+      }
+    }
+
+    .modal-body {
+      input[type=checkbox] {
+        margin-right: 5px;
+      }
+    }
+
+    .modal-footer {
+      border: 0;
+
+      .btn {
+        border-color: transparent;
+        width: max-content;
+        padding: 15px 50px;
+        margin: 0 auto;
+      }
+    }
+  }
+}

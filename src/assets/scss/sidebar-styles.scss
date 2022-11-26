@@ -1,0 +1,18 @@
+.offcanvas-backdrop,
+.offcanvas {
+  @include media-breakpoint-up(sm) {
+    display: none;
+  }
+}
+
+.offcanvas {
+  width: 100%;
+  max-width: 300px;
+  background-color: #21536D;
+}
+
+.vertically-centered {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}

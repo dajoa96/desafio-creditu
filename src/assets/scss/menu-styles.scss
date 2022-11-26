@@ -9,10 +9,12 @@
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
+    top: calc(100% + 18px)!important;
+    transform: scaleY(0)!important;
 
     &.dropdown-menu-end {
       right: 0;
-      top: 0;
+      transform-origin: top;
 
       &::before {
         content: "";
@@ -28,9 +30,9 @@
 
       &.show {
         pointer-events: unset;
-        margin-top: 18px!important;
         visibility: visible;
         opacity: 1;
+        transform: scaleY(1)!important;
       }
     }
 
