@@ -25,7 +25,10 @@
     "types": [
       "jest"
     ],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "src": ["./src"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
