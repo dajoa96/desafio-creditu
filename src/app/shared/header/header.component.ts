@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
   }
 
   openSidebar() {
-    const offcanvasRef = this.offcanvasService.open(SidebarComponent);
+    this.offcanvasService.open(SidebarComponent);
   }
 
   onSignOut() {

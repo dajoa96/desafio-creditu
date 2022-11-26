@@ -22,12 +22,11 @@
         <li class="nav-item dropdown custom-dropdown" *ngIf="currentUser && currentUser">
           <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="user-image">
-              <img [src]="defaultUserImg" [alt]="currentUser?.nickname || 'Profile Image'" class="img-fluid profile-image">
+              <img [src]="currentUser?.avatar || defaultUserImg" [alt]="currentUser?.nickname || 'Profile Image'" class="img-fluid profile-image">
             </div>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" routerLink="/users">{{ currentUser?.nickname || 'Profile' }}</a></li>
-            <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" (click)="onSignOut()">Sign Out</a></li>
           </ul>
         </li>
