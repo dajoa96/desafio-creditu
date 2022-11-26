@@ -3,9 +3,11 @@
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
 @import 'assets/scss/menu-styles.scss';
+@import 'assets/scss/sidebar-styles.scss';
 @import 'assets/scss/font-declarations.scss';
 @import 'assets/scss/font-styles.scss';
 @import 'assets/scss/form-styles.scss';
+@import 'assets/scss/modal-styles.scss';
 
 html,
 body {
@@ -19,23 +21,12 @@ body {
   background-repeat: no-repeat;
   background-position: 100% 100%;
   background-attachment: fixed;
-}
 
-.offcanvas-backdrop,
-.offcanvas {
-  @include media-breakpoint-up(sm) {
-    display: none;
+  @include media-breakpoint-down(lg) {
+    background-image: none;
   }
 }
 
-.offcanvas {
-  width: 100%;
-  max-width: 300px;
-  background-color: #042536;
-}
-
-.vertically-centered {
-  height: 100%;
-  display: flex;
-  align-items: center;
+.cursor-pointer {
+  cursor: pointer;
 }
