@@ -6,7 +6,7 @@
     </div>
     <div class="dropdown custom-dropdown" *ngIf="filters && filters.length > 0">
       <div class="form-control dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        {{ currentFilter?.label || 'All' }}
+        <span>{{ currentFilter?.label || 'All' }}</span>
       </div>
       <ul class="dropdown-menu dropdown-menu-end" *ngIf="filters && filters.length > 0">
         <li *ngFor="let item of filters">

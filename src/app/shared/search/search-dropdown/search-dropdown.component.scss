@@ -1,5 +1,5 @@
 @import '~bootstrap/scss/bootstrap';
-@import '../../../../assets/scss/form-styles.scss';
+@import 'src/assets/scss/form-styles.scss';
 
 .search-dropdown {
   form {
@@ -37,8 +37,17 @@
         align-items: center;
         z-index: 999;
 
+        @include media-breakpoint-down(sm) {
+          width: 110px;
+        }
+
         &::after {
           margin-left: auto;
+        }
+
+        span {
+          text-overflow: ellipsis;
+          overflow: hidden;
         }
 
         .dropdown-menu {
