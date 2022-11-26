@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Subscription } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-search',
@@ -10,29 +11,19 @@ import { Subscription } from 'rxjs';
 export class SearchComponent implements OnInit, OnDestroy {
   paramsSub$?: Subscription;
   params?: any;
-  showLoader: boolean = true;
+  showLoader: boolean = false;
+  bhData: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   data: any = {
-    list: [
-      { id: 1, gameType: 'Rally Racing', nickname: 'jp1995' },
-      { id: 1, gameType: 'Rally Racing', nickname: 'jp1995' },
-      { id: 1, gameType: 'Rally Racing', nickname: 'jp1995' },
-      { id: 1, gameType: 'Rally Racing', nickname: 'jp1995' },
-      { id: 1, gameType: 'Rally Racing', nickname: 'jp1995' },
-      { id: 1, gameType: 'Rally Racing', nickname: 'jp1995' },
-      { id: 1, gameType: 'Rally Racing', nickname: 'jp1995' },
-      { id: 1, gameType: 'Rally Racing', nickname: 'jp1995' },
-      { id: 1, gameType: 'Rally Racing', nickname: 'jp1995' },
-      { id: 1, gameType: 'Rally Racing', nickname: 'jp1995' },
-      { id: 1, gameType: 'Rally Racing', nickname: 'jp1995' }
-    ],
+    list: [],
     pagination: {
       currentPage: 1,
-      totalElements: 15
+      totalElements: 0
     }
   }
 
   constructor(
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -46,8 +37,30 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.paramsSub$?.unsubscribe();
   }
 
-  onNewParams() {
+  async onNewParams() {
     console.log('buscar', this.params);
+    this.showLoader = true;
+    let searchParams: any = { page: this.data.pagination.currentPage }
+    if (this.params?.search && this.params?.search !== '') searchParams.search = this.params?.search;
+    if (this.params?.gameType && this.params?.gameType !== '') searchParams.gameType = this.params?.gameType;
+    try {
+      const res = await firstValueFrom(this.userService.getUsers(searchParams));                 //Here we use an await promise to simplify the fetching process
+      if (res.status.toLowerCase() === 'success' && Array.isArray(res.data.users)) {       //So we can wait for the data to be available
+        this.data.list = res.data.users;
+        this.data.pagination = res.data.pagination;
+        console.log(this.data)
+        this.bhData.next(this.data);
+      }
+      this.showLoader = false;
+    } catch (error) {
+      this.showLoader = false;
+    }
+  }
+
+  onNewPageHandler(page: number) {
+    if (typeof page !== 'number') return;
+    this.data.pagination.currentPage = page;
+    this.onNewParams();
   }
 
 }

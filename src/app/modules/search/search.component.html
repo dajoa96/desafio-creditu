@@ -1,11 +1,15 @@
 <section class="app-search">
   <div class="container">
+    <p class="page-title">
+      <i routerLink="/home" class="fa-solid fa-circle-arrow-left cursor-pointer"></i>
+      Results
+    </p>
     <app-player-pager
-      [data]="data"
-      [showHallOfFame]="true"
-      [showBottomPagination]="false"
+      [data]="bhData"
       [showTopSearch]="true"
+      [showBottomPagination]="true"
       [showLoader]="showLoader"
+      (onNewPage)="onNewPageHandler($event)"
     ></app-player-pager>
   </div>
 </section>
