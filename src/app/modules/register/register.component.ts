@@ -79,7 +79,7 @@ export class RegisterComponent implements OnInit {
               if (res.error == "duplicated-email") throw new Error("Nickname is already taken");
               throw new Error("An unknown error has ocurred, please try again");
             } else {
-              this.notifierService.notify('success', 'You have successfully Signed Up, please Login to access Racing Cars!');
+              this.notifierService.notify('success', 'You have successfully Signed Up, please Login to access Kraken Race!');
               this.router.navigate(['/login']);
               this.spinner.hide();
             }
