@@ -54,6 +54,18 @@
   .title {
     margin-bottom: 12px;
   }
+
+  .form-options {
+    @include media-breakpoint-down(sm) {
+      margin-top: 10px;
+    }
+    a {
+      @include media-breakpoint-down(sm) {
+        font-size: 14px;
+        line-height: 16px;
+      }
+    }
+  }
 }
 
 .form-control,
