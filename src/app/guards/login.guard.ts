@@ -8,8 +8,8 @@ import { UserService } from '../services/user.service';
 })
 export class LoginGuard implements CanActivate {
   constructor(
-    private userService: UserService,
-    private router: Router
+    private readonly userService: UserService,
+    private readonly router: Router
   ) { }
 
   canActivate(
@@ -18,7 +18,6 @@ export class LoginGuard implements CanActivate {
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const resp = this.userService.checkToken() ? true : false;
     if (!resp) {
-      console.log('NO ESTA LOGUEADO, POR FAVOR INICIAR SESION PRIMERO'); //Only For Testing
       this.router.navigate(['/home']);
       return false;
     }
