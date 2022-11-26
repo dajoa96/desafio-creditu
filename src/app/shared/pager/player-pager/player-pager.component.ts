@@ -1,6 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { NotifierService } from 'angular-notifier';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { SearchFilterModel } from 'src/app/models/search-filter.model';
+import { GameTypesStatic } from '../../static/game-types.static';
 
 @Component({
   selector: 'app-player-pager',
@@ -13,6 +15,7 @@ export class PlayerPagerComponent implements OnInit, OnDestroy {
   @Input('showBottomPagination') showBottomPagination: boolean = false;
   @Input('showTopSearch') showTopSearch: boolean = false;
   @Input('showLoader') showLoader: boolean = false;
+  @Output('onNewPage') onNewPage: EventEmitter<number> = new EventEmitter<number>();
   list?: any[];
   currentPage: number = 1;
   totalPages: number = 0;
@@ -38,7 +41,9 @@ export class PlayerPagerComponent implements OnInit, OnDestroy {
   ];
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor() { }
+  constructor(
+    private readonly notifierService: NotifierService
+  ) { }
 
   ngOnInit(): void {
     this.data?.pipe(takeUntil(this.destroy$)).subscribe({
@@ -46,10 +51,9 @@ export class PlayerPagerComponent implements OnInit, OnDestroy {
         if (res) this.list = this.setDataHOF(res);
       },
       error: (err) => {
-        console.log(err)
+        this.notifierService.notify('error', 'An error has ocurred, please try again');
       }
     })
-    // this.list = this.setDataHOF();
   }
 
   ngOnDestroy(): void {
@@ -60,7 +64,6 @@ export class PlayerPagerComponent implements OnInit, OnDestroy {
   //Method used to map the data according to the ranking, this is used to not access directly to the property data.list
   setDataHOF(data: any): any[] | undefined {
     try {
-      console.log(data);
       if (!data?.list) return;                                                      //if the data list is undefined return undefined
       if (!data?.list?.length) return [];                                           //If the data list is an empty array return another empty array
       this.currentPage = data?.pagination?.currentPage || 0;
@@ -78,8 +81,14 @@ export class PlayerPagerComponent implements OnInit, OnDestroy {
     }
   }
 
-  onNewSearchHandler(e: any) {
-    console.log('onNewSearchHandler', e);
+  onPageChange(page: number) {
+    if (typeof page !== 'number') return;
+    this.onNewPage.emit(page);
   }
 
+  getGameType(gameType?: string) {
+    if (!gameType || gameType === '') return '';
+    const match = GameTypesStatic.slice().find(f => f.gameType === gameType.toLowerCase());
+    return match && match !== '' ? match?.label : '';
+  }
 }

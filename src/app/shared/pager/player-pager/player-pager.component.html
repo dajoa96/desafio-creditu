@@ -1,7 +1,9 @@
-<div class="search__wrapper" *ngIf="showTopSearch">
+<div class="search__wrapper"
+  *ngIf="showTopSearch"
+  [ngClass]="{ 'has-hall-of-fame': showHallOfFame && !showLoader && currentPage === 1 && list && list.length > 0 }"
+>
   <app-search-dropdown
     [filters]="filters"
-    (onNewSearch)="onNewSearchHandler($event)"
   ></app-search-dropdown>
 </div>
 <div class="table__wrapper" [ngClass]="{ 'has-top-search-bar': showTopSearch, 'has-hall-of-fame': showHallOfFame && !showLoader && currentPage === 1 && list && list.length > 0 }">
@@ -21,6 +23,7 @@
     </ng-container>
   </div>
   <div class="table-responsive__wrapper">
+    <p class="page-title" *ngIf="showHallOfFame && !showLoader && currentPage === 1 && list && list.length > 0">Ranking</p>
     <ng-container *ngIf="showLoader">
       <div class="table-loader">
         <div class="spinner-border" role="status"></div>
@@ -62,7 +65,7 @@
                   </td>
                   <td>
                     <div class="player-category">
-                      {{ item?.gameType }}
+                      {{ getGameType(item?.gameType) }}
                     </div>
                   </td>
                   <td>
@@ -92,7 +95,7 @@
                 </td>
                 <td>
                   <div class="player-category">
-                    {{ item?.gameType }}
+                    {{ getGameType(item?.gameType) }}
                   </div>
                 </td>
                 <td>
@@ -116,7 +119,7 @@
               {{totalPages}}
             </span>
           </div>
-          <ngb-pagination [collectionSize]="totalElements" [(page)]="currentPage">
+          <ngb-pagination [collectionSize]="totalElements" [(page)]="currentPage" (pageChange)="onPageChange($event)">
             <ng-template ngbPaginationPrevious>
               <i class="fa-solid fa-caret-left"></i>
             </ng-template>

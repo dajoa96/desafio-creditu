@@ -1,9 +1,15 @@
 @import '~bootstrap/scss/bootstrap';
-@import '../../../../assets/scss/form-styles.scss';
+@import 'src/assets/scss/form-styles.scss';
 
 .search__wrapper {
   max-width: 568px;
   margin-left: auto;
+  position: relative;
+  z-index: 9;
+
+  &.has-hall-of-fame {
+    z-index: 999;
+  }
 
   @include media-breakpoint-down(lg) {
     margin: 0 auto;
@@ -31,6 +37,22 @@
 
     @include media-breakpoint-down(md) {
       margin-top: -50px;
+    }
+
+    .table-responsive__wrapper {
+      z-index: 999;
+
+      .page-title {
+        position: absolute;
+        left: 0;
+        top: -58px;
+
+        @include media-breakpoint-down(sm) {
+          font-size: 15px;
+          line-height: 18px;
+          top: -48px;
+        }
+      }
     }
   }
 
@@ -233,7 +255,7 @@
     padding: 28px;
     display: grid;
     border-radius: 20px;
-    z-index: 999;
+    // z-index: 999;
 
     @include media-breakpoint-down(md) {
       padding: 14px;
