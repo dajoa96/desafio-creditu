@@ -1,107 +1,113 @@
 <section class="app-users">
   <div class="container">
     <div class="form__wrapper">
-      <div class="">
-        <i class="fa-solid fa-trash-can"></i>
-      </div>
-      <div class="avatar-image">
-        <img src="/assets/images/user/user-placeholder.jpg" alt="">
-      </div>
-      <div class="row">
-        <div class="col mb-3 mt-3">
-          <img src="/assets/images/user/trofeo.png" width="35" alt="">
-          <p class="p__form">1000 PTS</p>
+      <ng-container *ngIf="showLoader">
+        <div class="loader">
+          <div class="spinner-border" role="status"></div>
+          <span class="text-center">Loading...</span>
         </div>
-        <div class="col mb-3 mt-3">
-          <img src="/assets/images/user/win.png" width="35" alt="">
-          <p class="p__form">50 WIN</p>
-        </div>
-        <div class="col mb-3 mt-3">
-          <img src="/assets/images/user/loss.png" width="35" alt="">
-          <p class="p__form">10 DEFEATS</p>
-        </div>
-      </div>
-      <div>
-        <ul ngbNav #nav="ngbNav" class="nav-pills nav-justified mb-5">
-          <li ngbNavItem>
-            <a ngbNavLink><img src="/assets/images/user/rally.png" alt=""></a>
-            <p class="p__form">Sport</p>
-            <ng-template ngbNavContent>
-            </ng-template>
-          </li>
-          <li ngbNavItem>
-            <a ngbNavLink><img src="/assets/images/user/f1.png" alt=""></a>
-            <p class="p__form">Formula 1</p>
-            <ng-template ngbNavContent>
-            </ng-template>
-          </li>
-          <li ngbNavItem>
-            <a ngbNavLink><img src="/assets/images/user/rally.png" alt=""></a>
-            <p class="p__form">Rally</p>
-            <ng-template ngbNavContent>
-            </ng-template>
-          </li>
-        </ul>
-      </div>
-      <div [ngbNavOutlet]="nav" class="mt-2"></div>
-      <form [formGroup]="loginForm" (submit)="onSubmit()">
-        <div class="form-group mb-2">
-          <input type="email" class="form-control" placeholder="Email" formControlName="email"
-            [ngClass]="{ 'is-invalid': isSubmitted && fc.email.errors }"
-          >
-          <div class="invalid-feedback" *ngIf="isSubmitted && fc.email.errors">
-            <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.required">Email is required</p>
-            <p class="is-invalid" *ngIf="isSubmitted && fc.email.errors.pattern">Invalid Email</p>
+      </ng-container>
+      <ng-container *ngIf="!showLoader && !errorMessage">
+        <button type="button" class="btn btn-danger btn-round" title="Delete Player" (click)="onDelete()">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+        <form [formGroup]="userForm" (submit)="onSubmit()">
+          <input type="file" class="file-input d-none" (change)="onFileSelected($event)" #fileUpload>
+          <div class="avatar-image" (click)="fileUpload.click()">
+            <img [src]="uploadPlayerImg || userData?.avatar || noPlayerImg" [alt]="'...'">
+            <i class="fa-solid fa-file-arrow-up upload-icon"></i>
           </div>
-        </div>
-        <div class="form-group mb-2">
-          <input type="text" class="form-control" placeholder="Nickname" formControlName="nickname"
-            [ngClass]="{ 'is-invalid': isSubmitted && fc.nickname.errors }"
-          >
-          <div class="invalid-feedback" *ngIf="isSubmitted && fc.nickname.errors">
-            <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.required">Nickname is required</p>
-            <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.minlength">Nickname is too short</p>
-            <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.maxlength">Nickname is too long</p>
+          <div class="invalid-feedback" *ngIf="isSubmitted && fc.avatar.errors">
+            <p class="is-invalid" *ngIf="isSubmitted && fc.avatar.errors.invalidImageType">The image must be a .jpg, .jpeg or .png file</p>
+            <p class="is-invalid" *ngIf="isSubmitted && fc.avatar.errors.invalidImageSize">The image is larger than 2MB</p>
           </div>
-        </div>
-        <p class="p__locate">Change password</p>
-        <div class="form-group mb-2">
-          <div class="form-group__icon">
-            <input [type]="showPassword ? 'text' : 'password'" class="form-control form-control__has-icon" placeholder="New password" formControlName="password"
-              [ngClass]="{ 'is-invalid': isSubmitted && fc.password.errors }"
+          <div class="row player-metadata">
+            <div class="col mb-3 mt-3">
+              <img src="/assets/images/user/trofeo.png" alt="">
+              <p class="p__form">{{ userData?.ranking?.points || 0 }} PTS</p>
+            </div>
+            <div class="col mb-3 mt-3">
+              <img src="/assets/images/user/win.png" alt="">
+              <p class="p__form">{{ userData?.ranking?.wins || 0 }} WIN</p>
+            </div>
+            <div class="col mb-3 mt-3">
+              <img src="/assets/images/user/loss.png" alt="">
+              <p class="p__form">{{ userData?.ranking?.defeats || 0 }} DEFEATS</p>
+            </div>
+          </div>
+          <ng-container *ngIf="gameTypes && gameTypes.length > 0">
+            <div class="game-type">
+              <ul ngbNav #nav="ngbNav" [(activeId)]="activeId" (navChange)="$event.preventDefault()" class="nav-pills nav-justified mb-5">
+                <li [ngbNavItem]="null || undefined || ''" class="d-none"></li>
+                <li [ngbNavItem]="type?.gameType" *ngFor="let type of gameTypes">
+                  <a ngbNavLink (click)="onGameTypeSelected(type?.gameType)"><img [src]="type?.image || noPlayerImg" [alt]="type?.label || 'Game Type'"></a>
+                  <p class="p__form">{{ type?.label }}</p>
+                  <ng-template ngbNavContent>
+                  </ng-template>
+                </li>
+              </ul>
+            </div>
+            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+          </ng-container>
+          <div class="invalid-feedback" *ngIf="isSubmitted && fc.gameType.errors">
+            <p class="is-invalid" *ngIf="isSubmitted && fc.gameType.errors.required">GameType is required</p>
+          </div>
+          <div class="form-group mb-2">
+            <input type="email" class="form-control" placeholder="Email" [value]="userData?.email || ''" readonly>
+          </div>
+          <div class="form-group mb-2">
+            <input type="text" class="form-control" placeholder="Nickname" formControlName="nickname"
+              [ngClass]="{ 'is-invalid': isSubmitted && fc.nickname.errors }"
             >
-            <i class="fa-solid form-control__icon"
-              [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
-              (click)="showPassword = !showPassword"
-            ></i>
+            <div class="invalid-feedback" *ngIf="isSubmitted && fc.nickname.errors">
+              <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.required">Nickname is required</p>
+              <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.minlength">Nickname is too short</p>
+              <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.maxlength">Nickname is too long</p>
+              <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.nicknameIsTaken">Nickname is already taken</p>
+              <p class="is-invalid" *ngIf="isSubmitted && fc.nickname.errors.nicknameIsTakenError">Error validating Nickname</p>
+            </div>
           </div>
-          <div class="invalid-feedback" *ngIf="isSubmitted && fc.password.errors">
-            <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.minlength">Password is too short</p>
-            <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.maxlength">Password is too long</p>
+          <p class="p__locate">Change Password</p>
+          <div class="form-group mb-2">
+            <div class="form-group__icon">
+              <input [type]="showPassword ? 'text' : 'password'" class="form-control form-control__has-icon" placeholder="New password" formControlName="password"
+                [ngClass]="{ 'is-invalid': isSubmitted && fc.password.errors }"
+              >
+              <i class="fa-solid form-control__icon"
+                [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"
+                (click)="showPassword = !showPassword"
+              ></i>
+            </div>
+            <div class="invalid-feedback" *ngIf="isSubmitted && fc.password.errors">
+              <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.minlength">Password is too short</p>
+              <p class="is-invalid" *ngIf="isSubmitted && fc.password.errors.maxlength">Password is too long</p>
+            </div>
           </div>
-        </div>
-        <div class="form-group mb-2">
-          <div class="form-group__icon">
-            <input [type]="showRepeatPassword ? 'text' : 'password'" class="form-control form-control__has-icon" placeholder="Repeat password" formControlName="repeatPassword"
-              [ngClass]="{ 'is-invalid': isSubmitted && fc.repeatPassword.errors }"
-            >
-            <i class="fa-solid form-control__icon"
-              [ngClass]="showRepeatPassword ? 'fa-eye-slash' : 'fa-eye'"
-              (click)="showRepeatPassword = !showRepeatPassword"
-            ></i>
+          <div class="form-group mb-2">
+            <div class="form-group__icon">
+              <input [type]="showRepeatPassword ? 'text' : 'password'" class="form-control form-control__has-icon" placeholder="Repeat password" formControlName="repeatPassword"
+                [ngClass]="{ 'is-invalid': isSubmitted && fc.repeatPassword.errors }"
+              >
+              <i class="fa-solid form-control__icon"
+                [ngClass]="showRepeatPassword ? 'fa-eye-slash' : 'fa-eye'"
+                (click)="showRepeatPassword = !showRepeatPassword"
+              ></i>
+            </div>
+            <div class="invalid-feedback" *ngIf="isSubmitted && fc.repeatPassword.errors">
+              <p class="is-invalid" *ngIf="isSubmitted && fc.repeatPassword.errors.required">You must confirm the Password</p>
+              <p class="is-invalid" *ngIf="isSubmitted && fc.repeatPassword.errors.mustMatch">Passwords don't match</p>
+            </div>
           </div>
-          <div class="invalid-feedback" *ngIf="isSubmitted && fc.repeatPassword.errors">
-            <p class="is-invalid" *ngIf="isSubmitted && fc.repeatPassword.errors.required">You must confirm the Password</p>
-            <p class="is-invalid" *ngIf="isSubmitted && fc.repeatPassword.errors.mustMatch">Passwords don't match</p>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary"
+              [disabled]="userForm.valid && userForm.pristine"
+            >Update</button>
           </div>
-        </div>
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary">Update</button>
-        </div>
-        <div class="invalid-feedback" *ngIf="isSubmitted && errorMessage === ''">
-          <p class="is-invalid">{{ errorMessage }}</p>
-        </div>
-      </form>
+        </form>
+      </ng-container>
+      <div class="invalid-feedback" *ngIf="errorMessage !== ''">
+        <p class="is-invalid message-error">{{ errorMessage }}</p>
+      </div>
     </div>
   </div>
 </section>

@@ -1,38 +1,197 @@
+@import '~bootstrap/scss/bootstrap-grid';
+@import 'src/assets/scss/custom-breakpoints.scss';
+
 .app-users {
-  .btn {
-    display: inline;
-    width: 50%;
-  }
+  .form__wrapper {
+    background-image: linear-gradient(to bottom, #21536D 124px, #042536 0%);
+    position: relative;
 
-  .avatar-image {
-    width: 140px;
-    height: 140px;
-    display: inline-block;
-    overflow: hidden;
-    border-radius: 100px;
+    @include media-breakpoint-down(md) {
+      padding: 30px 50px!important;
+    }
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
+    .loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      position: relative;
+      gap: 10px;
+      top: -38px;
+
+      @include media-breakpoint-down(md) {
+        top: 0;
+      }
+    }
+
+    .avatar-image {
+      position: relative;
+      top: -15px;
+      cursor: pointer;
+      width: 140px;
+      height: 140px;
+      display: block;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 100px;
+
+      @include media-breakpoint-down(md) {
+        margin-top: 48px;
+        width: 90px;
+        height: 90px;
+        top: 0;
+      }
+
+      &:hover,
+      &:active {
+        &::before {
+          opacity: 1;
+        }
+
+        .upload-icon {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+
+      &::before {
+        content: "";
+        background-color: rgba(0, 0, 0, 0.3);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        transition: .3s;
+        opacity: 0;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      .upload-icon {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        visibility: hidden;
+        transition: .3s;
+      }
+    }
+
+    .player-metadata {
+      @include media-breakpoint-down(sm) {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      .col {
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        grid-template-rows: 1fr 1fr;
+        text-align: center;
+
+        img {
+          width: 50px;
+          height: 50px;
+          margin: 0 auto;
+        }
+      }
+    }
+
+    .message-error {
+      @include media-breakpoint-down(md) {
+        margin: 0;
+      }
     }
   }
 
-  .nav-link.active {
-    background-color: #21536D;
-    border-radius: 21px;
-    height: 100%;
+  .game-type {
+    .nav-pills {
+      column-gap: 10px;
+      row-gap: 30px;
+      justify-content: space-between;
+
+      @include media-breakpoint-down(md) {
+        justify-content: center;
+      }
+
+      .nav-item {
+        width: 110px;
+        max-width: 110px;
+        height: 110px;
+
+        @include media-breakpoint-down(md) {
+          width: 85px;
+          max-width: 85px;
+          height: 85px;
+        }
+
+        @include media-breakpoint-down(xs) {
+          width: 60px;
+          max-width: 60px;
+          height: 60px;
+          row-gap: 30px;
+        }
+
+        .nav-link {
+          height: 100%;
+          width: 100%;
+          border-radius: 25px;
+          background-color: white;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+
+          &.active {
+            background-color: #21536D;
+            height: 100%;
+          }
+
+          @include media-breakpoint-down(md) {
+            border-radius: 20px;
+          }
+
+          img {
+            margin: 0 auto;
+
+            @include media-breakpoint-down(xs) {
+              width: 45px;
+              height: 45px;
+            }
+          }
+        }
+      }
+    }
   }
 
-  .nav-item {
-    background-color: white;
-    margin: 10px;
-    border-radius: 25px;
-    width: 100px;
-    height: 100px;
-    .nav-link {
-      height: 100%;
+  .btn {
+    display: inline;
+
+    &[type=submit] {
+      max-width: 241px;
+      font-weight: 400;
+    }
+
+    &.btn-danger {
+      border: 0;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      font-size: 24px;
+      position: absolute;
+      right: 33px;
+      top: 37px;
     }
   }
 
@@ -46,9 +205,6 @@
    }
   }
 
-  .form__wrapper {
-    background-image: linear-gradient(to bottom, #21536D 140px, #042536 0%);
-  }
 
   .p__locate {
     display: flex;
