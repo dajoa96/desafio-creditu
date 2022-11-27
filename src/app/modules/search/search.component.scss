@@ -1,0 +1,39 @@
+@import '~bootstrap/scss/bootstrap-grid';
+@import 'src/assets/scss/custom-breakpoints.scss';
+
+.app-search {
+  .page-title {
+    position: absolute;
+    top: 215px;
+
+    @include media-breakpoint-down(xxl) {
+      top: 185px;
+    }
+
+    @include media-breakpoint-down(xl) {
+      top: 155px;
+    }
+
+    @include media-breakpoint-down(lg) {
+      top: 215px;
+    }
+
+    @include media-breakpoint-down(md) {
+      top: 190px;
+    }
+
+    @include media-breakpoint-down(sm) {
+      top: 155px;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .table__wrapper {
+    margin-top: 30px!important;
+
+    @include media-breakpoint-down(lg) {
+      margin-top: 60px!important;
+    }
+  }
+}
