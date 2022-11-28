@@ -20,11 +20,12 @@ export class AuthInterceptor implements HttpInterceptor {
     if (request.headers && !request.headers.has(InterceptorSkip) && this.userService.checkToken()) {    //We check that if the headers contains the interceptorSkip, then nothing will ocurr. Aditionally we check the JWT if it's expired the app will logout the user
       const token = localStorage.getItem('app-token');                                                  //We get the token
       if (token && token !== '') {                                                                      //We also check the token is not empty, this is required to avoid errors with the clone method
-        request.clone({
+        request = request.clone({
           setHeaders: {
-            Authorization: token                                                                        //We set the Authorization header with our JWT
+            authorization: token                                                                        //We set the Authorization header with our JWT
           }
         });
+        console.log(request)
       };
     }
     return next.handle(request);
