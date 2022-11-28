@@ -40,5 +40,13 @@ export class AuthService {
     return this.http.post(`${this.API_URL}/users/updateUser`, user);
   }
 
+  recoveryPassword(email: CheckEmailRequestModel): Observable<any> {
+    return this.http.post(`${this.API_URL}/users/recoveryPassword`, email, { headers: this.skipAuthInterceptor });
+  }
+
+  updatePassword(token: string, user: FormData) {
+    return this.http.post(`${this.API_URL}/users/updateUser`, user, { headers: this.skipAuthInterceptor.set('authorization', token) });
+  }
+
 
 }
