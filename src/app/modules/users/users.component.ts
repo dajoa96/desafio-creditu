@@ -206,12 +206,10 @@ export class UsersComponent implements OnInit {
               if (!res.data.token || res.data.token === '') throw new Error("An error has ocurred, please try again");
               if (!this.userService.setToken(res.data.token) || !this.userService.checkToken()) throw new Error("An error has ocurred, please try again");
               this.notifierService.notify('success', 'User successfully updated!');
-
               this.userForm.reset();
               this.getUserData();
               this.isSubmitted = false;
               this.userForm.markAsPristine();
-
               this.spinner.hide();
             }
           } catch (error: any) {
