@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject, first, map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { InterceptorSkip } from '../shared/interceptor/auth.interceptor';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -14,7 +15,8 @@ export class UserService {
   isLogged$: Observable<boolean> = this.isLogged.asObservable();
   currentUser: BehaviorSubject<any> = new BehaviorSubject<any>(null)
   currentUser$: Observable<any> = this.currentUser.asObservable();
-  private API_URL: string = environment.api.link;
+  private readonly API_URL: string = environment.api.link;
+  private readonly skipAuthInterceptor: HttpHeaders = new HttpHeaders().set(InterceptorSkip, 'skip');
 
   constructor(
     private readonly authService: AuthService,
@@ -61,7 +63,6 @@ export class UserService {
     localStorage.removeItem('app-token');
     this.isLogged.next(false);
     this.currentUser.next(null);
-    //Should redirect?
   }
 
   //Checks if email is already taken
@@ -98,10 +99,10 @@ export class UserService {
 
   //Find top ten players in the ranking
   getTopRanking(): Observable<any> {
-    return this.http.post(`${this.API_URL}/users/getRanking`, null);
+    return this.http.post(`${this.API_URL}/users/getRanking`, null, { headers: this.skipAuthInterceptor });
   }
 
   getUsers(params: any): Observable<any> {
-    return this.http.post(`${this.API_URL}/users/findUsers`, params);
+    return this.http.post(`${this.API_URL}/users/findUsers`, params, { headers: this.skipAuthInterceptor });
   }
 }
