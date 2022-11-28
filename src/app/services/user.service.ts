@@ -46,10 +46,8 @@ export class UserService {
       if (this.jwtHelper.isTokenExpired(token)) throw new Error("Token is Expired");
       const decodedtoken = this.jwtHelper.decodeToken(token);
       if (!decodedtoken || decodedtoken === '') throw new Error("Invalid Token");
-      // console.log(decodedtoken)
       this.currentUser.next(decodedtoken);
       this.isLogged.next(true);
-      // console.log('si hay token')
       return true;
     } catch (error) {
       console.log('fallo o no hay token', error); // Only for testing
