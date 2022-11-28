@@ -21,9 +21,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
-    private readonly userService: UserService,     //Only for Testing
+    private readonly userService: UserService,
     private readonly spinner: NgxSpinnerService,
-    private readonly router: Router,               //Only for Testing
+    private readonly router: Router,
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)]],
@@ -46,10 +46,8 @@ export class LoginComponent implements OnInit {
     //Only if the form is valid, we submit
     if (this.loginForm.valid) {
       this.spinner.show();
-      console.log(this.loginForm.value);
       this.authService.login(this.loginForm.value).pipe(first()).subscribe({
         next: (res) => {
-          console.log(res);
           try {
             if (res.status.toLowerCase() != 'success') {
               if (res.error == "invalid-email" || res.error == "invalid-password") throw new Error("Invalid Email and/or Password");
@@ -57,7 +55,7 @@ export class LoginComponent implements OnInit {
             } else {
               if (!res.data.token || res.data.token === '') throw new Error("An error has ocurred, please try again");
               if (!this.userService.setToken(res.data.token) || !this.userService.checkToken()) throw new Error("An error has ocurred, please try again");
-              this.router.navigate(['/home']);
+              this.router.navigate(['/users']);
               this.spinner.hide();
             }
           } catch (error: any) {
@@ -65,7 +63,6 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (err) => {
-          console.log(err);
           this.errorHandler();
         }
       });
