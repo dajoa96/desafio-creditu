@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NotifierService } from 'angular-notifier';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { first, firstValueFrom } from 'rxjs';
 import { LoginRequestModel } from 'src/app/models/user-requests.model';
 import { AuthService } from 'src/app/services/auth.service';
@@ -32,8 +34,10 @@ export class UsersComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly modalService: NgbModal,
     private readonly authService: AuthService,
-    private readonly userService: UserService,     //Only for Testing
-    private readonly router: Router,               //Only for Testing
+    private readonly userService: UserService,
+    private readonly spinner: NgxSpinnerService,
+    private readonly notifierService: NotifierService,
+    private readonly router: Router,
   ) {
     this.userForm = this.fb.group({
       nickname: [
@@ -78,10 +82,7 @@ export class UsersComponent implements OnInit {
       if (!this.userForm.valid && this.userForm.pristine) this.isSubmitted = true;
       this.gameTypes = GameTypesStatic.slice();
       if (!this.gameTypes || this.gameTypes?.length <= 0) throw new Error();
-      const res = await firstValueFrom(this.userService.getUsers({ search:
-        // "637a993e661a060290f07c4e" //Only For Testing
-        data?._id
-      }));
+      const res = await firstValueFrom(this.userService.getUsers({ search: data?._id }));
       if (res.status.toLowerCase() !== 'success' || !Array.isArray(res.data.users) || res.data.users.length !== 1) throw new Error();
       this.showLoader = false;
       this.userData = res.data.users[0];
@@ -107,7 +108,8 @@ export class UsersComponent implements OnInit {
 
       reader.onload = () => {
         this.uploadPlayerImg = reader.result as string;
-        this.userForm.get('avatar')?.setValue(file);
+        const base64String = this.uploadPlayerImg.replace('data:', '').replace(/^.+,/, '');
+        this.userForm.get('avatar')?.setValue(new File([base64String], file.name, { type: file.type }));
         this.userForm.get('avatar')?.updateValueAndValidity();
         if (this.userForm.pristine) this.userForm.markAsDirty();
       }
@@ -115,7 +117,6 @@ export class UsersComponent implements OnInit {
   }
 
   async onGameTypeSelected(gameType: string, initialLoad: boolean = false) {
-    // this.activeId = 'rally-racing';
     if (!gameType || gameType === '' || typeof gameType !== 'string') return;
     if (!initialLoad) {
       const modalRef: NgbModalRef = this.modalService.open(CheckDialogModalComponent, { centered: true, backdrop: 'static' });
@@ -125,7 +126,6 @@ export class UsersComponent implements OnInit {
       modalRef.componentInstance.button = 'Change Game Type';
       const res = await firstValueFrom(modalRef.closed);
       try {
-        console.log(res);
         if (!res) return;
         this.activeId = gameType;
       } catch (error) {
@@ -145,10 +145,39 @@ export class UsersComponent implements OnInit {
     modalRef.componentInstance.button = 'Delete Player';
     const res = await firstValueFrom(modalRef.closed);
     if (res) {
+      this.spinner.show();
       //ToDo logica de eliminar user
-      this.userService.clearToken();
-      this.router.navigate(['/home']);
+      this.authService.removeUser(this.userData?._id).pipe(first()).subscribe({
+        next: (resp) => {
+          console.log(resp)
+          try {
+            if (resp.status.toLowerCase() !== 'success') {
+              if (resp.code === 502) throw new Error("An error has ocurred, user not deleted");
+              throw new Error("An unknown error has ocurred, user not deleted");
+            } else {
+              //Success
+              this.notifierService.notify('success', "Your user was successfully deleted, we hope to see you back soon!");
+              this.userService.clearToken();
+              this.router.navigate(['/home']);
+              this.spinner.hide();
+            }
+          } catch (error: any) {
+            this.errorHandler(error.message || error);
+          }
+        },
+        error: (err) => {
+          console.log(err)
+          this.errorHandler();
+          // this.userService.clearToken();
+          // this.router.navigate(['/login']);
+        }
+      });
     }
+  }
+
+  errorHandler(message?: string) {
+    this.spinner.hide();
+    this.notifierService.notify('error', message || "An error has ocurred, please try again");
   }
 
   onSubmit(): void {
@@ -158,37 +187,41 @@ export class UsersComponent implements OnInit {
     this.isSubmitted = true;
     //Only if the form is valid, we submit
     if (this.userForm.valid) {
-      const data: any = {
-        id: this.userData._id,
-        email: this.userForm.value.email
-      }
-      if (this.userForm?.value?.gameType && this.userForm?.value?.gameType !== '' && this.userForm?.value?.gameType?.toLowerCase() !== this.userData?.gameType?.toLowerCase()) data.gameType = this.userForm?.value?.gameType;
-      if (this.userData?.nickname.toLowerCase() !== this.userForm?.value?.nickname.toLowerCase()) data.nickname = this.userForm?.value?.nickname;
-      if (this.userForm?.value?.password && this.userForm?.value?.password !== '') data.password = this.userForm?.value?.password;
+      this.spinner.show();
       const fd: any = new FormData();
-      fd.append('data', JSON.stringify(data));
+      fd.append('_id', this.userData?._id);
+      fd.append('email', this.userData?.email);
+      if (this.userForm?.value?.gameType && this.userForm?.value?.gameType !== '' && this.userForm?.value?.gameType?.toLowerCase() !== this.userData?.gameType?.toLowerCase()) fd.append('gameType', this.userForm?.value?.gameType);
+      if (this.userData?.nickname.toLowerCase() !== this.userForm?.value?.nickname.toLowerCase()) fd.append('nickname', this.userForm?.value?.nickname);
+      if (this.userForm?.value?.password && this.userForm?.value?.password !== '') fd.append('password', this.userForm?.value?.password);
       if (this.userForm?.value?.avatar) fd.append('avatar', this.userForm?.value?.avatar);
-      console.log(Object.fromEntries(fd));
-      return;
-      this.authService.login(data).pipe(first()).subscribe({
+      this.authService.updateUser(fd).pipe(first()).subscribe({
         next: (res) => {
           console.log(res);
+          try {
+            if (res.status.toLowerCase() !== 'success') {
+              if (res.code === 502) throw new Error("An error has ocurred, user not updated");
+              throw new Error("An unknown error has ocurred, user not updated");
+            } else {
+              if (!res.data.token || res.data.token === '') throw new Error("An error has ocurred, please try again");
+              if (!this.userService.setToken(res.data.token) || !this.userService.checkToken()) throw new Error("An error has ocurred, please try again");
+              this.notifierService.notify('success', 'User successfully updated!');
+
+              this.userForm.reset();
+              this.getUserData();
+              this.isSubmitted = false;
+              this.userForm.markAsPristine();
+
+              this.spinner.hide();
+            }
+          } catch (error: any) {
+            this.errorHandler(error.message || error);
+          }
         },
         error: (err) => {
-          console.log(err);
-          switch(err.status) {
-            case 404:
-              this.errorMessage = 'The User/Password is incorret'
-            break;
-            default:
-              this.errorMessage = 'An error has ocurred'
-            break;
-          }
+          this.errorHandler();
        }
       });
-      this.userService.setToken(JSON.stringify(this.userForm.value));         //Only for Testing
-      if (this.userService.checkToken()) this.router.navigate(['/home'])       //Only for Testing
     }
   }
-
 }
