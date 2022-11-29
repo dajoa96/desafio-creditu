@@ -28,10 +28,10 @@ Correr `ng build` para generar un build (o contruir) del proyecto. Los resultado
 
 ## Para Test Unitarios
 
-Correr `npm run test` Para ejecutar los test unitarios via [Jest](https://jestjs.io/).
-Correr `npm run test:watch` Para ejecutar los test unitarios y mantener escuchando por cambios de manera continua (Recomendado solo para desarrollo).
-Correr `npm run test:coverage` Para ejecutar los test unitarios y generar un informe de coverage.
-Correr `npm run test:watch-coverage` Para ejecutar los test unitarios, mantener escuchando por cambios de manera continua y generar un informe de coverage.
+- Correr `npm run test` Para ejecutar los test unitarios via [Jest](https://jestjs.io/).
+- Correr `npm run test:watch` Para ejecutar los test unitarios y mantener escuchando por cambios de manera continua (Recomendado solo para desarrollo).
+- Correr `npm run test:coverage` Para ejecutar los test unitarios y generar un informe de coverage.
+- Correr `npm run test:watch-coverage` Para ejecutar los test unitarios, mantener escuchando por cambios de manera continua y generar un informe de coverage.
 
 ## Ayuda adicional
 
