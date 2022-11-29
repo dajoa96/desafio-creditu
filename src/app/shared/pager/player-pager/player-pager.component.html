@@ -85,7 +85,7 @@
               <tr *ngFor="let item of list">
                 <td>
                   <div class="player-image">
-                    <img [src]="item?.avatar || '/assets/images/user/user-placeholder.jpg'" [alt]="item?.nickname || 'Player Image'" class="img-fluid">
+                    <img [src]="item?.avatar || noImage" [alt]="item?.nickname || 'Player Image'" class="img-fluid">
                   </div>
                 </td>
                 <td>

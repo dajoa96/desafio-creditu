@@ -43,8 +43,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (this.params?.search && this.params?.search !== '') searchParams.search = this.params?.search;
     if (this.params?.gameType && this.params?.gameType !== '') searchParams.gameType = this.params?.gameType;
     try {
-      const res = await firstValueFrom(this.userService.getUsers(searchParams));                 //Here we use an await promise to simplify the fetching process
-      if (res.status.toLowerCase() === 'success' && Array.isArray(res.data.users)) {       //So we can wait for the data to be available
+      const res = await firstValueFrom(this.userService.getUsers(searchParams));         //Here we use an await promise to simplify the fetching process
+      if (res.status.toLowerCase() === 'success' && Array.isArray(res.data.users)) {     //So we can wait for the data to be available
         this.data.list = res.data.users;
         this.data.pagination = res.data.pagination;
         this.bhData.next(this.data);

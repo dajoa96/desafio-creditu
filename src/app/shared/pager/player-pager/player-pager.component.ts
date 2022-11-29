@@ -21,6 +21,7 @@ export class PlayerPagerComponent implements OnInit, OnDestroy {
   totalPages: number = 0;
   totalElements: number = 0;
   pageSize: number = 10;
+  noImage: string = '/assets/images/user/user-placeholder.jpg';
   filters: SearchFilterModel[] = [
     {
       label: 'All',
@@ -50,7 +51,7 @@ export class PlayerPagerComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res) this.list = this.setDataHOF(res);
       },
-      error: (err) => {
+      error: () => {
         this.notifierService.notify('error', 'An error has ocurred, please try again');
       }
     })

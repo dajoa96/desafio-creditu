@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { first } from 'rxjs';
-import { LoginRequestModel } from 'src/app/models/user-requests.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -62,7 +61,7 @@ export class LoginComponent implements OnInit {
             this.errorHandler(error.message || error);
           }
         },
-        error: (err) => {
+        error: () => {
           this.errorHandler();
         }
       });

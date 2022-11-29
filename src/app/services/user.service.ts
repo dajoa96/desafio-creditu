@@ -99,6 +99,7 @@ export class UserService {
     return this.http.post(`${this.API_URL}/users/getRanking`, null, { headers: this.skipAuthInterceptor });
   }
 
+  //Find users with filters optionally
   getUsers(params: any): Observable<any> {
     return this.http.post(`${this.API_URL}/users/findUsers`, params, { headers: this.skipAuthInterceptor });
   }

@@ -89,7 +89,7 @@ export class ResetPasswordComponent implements OnInit {
             this.errorHandler(error.message || error);
           }
         },
-        error: (err) => {
+        error: () => {
           this.errorHandler();
         }
       });
@@ -118,7 +118,7 @@ export class ResetPasswordComponent implements OnInit {
             this.errorHandler(error.message || error);
           }
         },
-        error: (err) => {
+        error: () => {
           this.errorHandler();
         }
       });

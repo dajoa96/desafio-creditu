@@ -8,7 +8,7 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   host: {
-    'class': 'h-100'
+    'class': 'h-100'  //We add a height: 100% class to the component's tag to make sure we use all the height available
   }
 })
 export class SidebarComponent implements OnInit {

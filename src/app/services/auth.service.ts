@@ -13,7 +13,7 @@ export class AuthService {
   private readonly skipAuthInterceptor: HttpHeaders = new HttpHeaders().set(InterceptorSkip, '');
 
   constructor(
-    private http: HttpClient
+    private readonly http: HttpClient
   ) { }
 
   checkEmail(email: CheckEmailRequestModel): Observable<any>  {
@@ -45,8 +45,7 @@ export class AuthService {
   }
 
   updatePassword(token: string, user: FormData) {
-    return this.http.post(`${this.API_URL}/users/updateUser`, user, { headers: this.skipAuthInterceptor.set('authorization', token) });
+    return this.http.post(`${this.API_URL}/users/updateUser`, user, { headers: this.skipAuthInterceptor.set('authorization', token) }); //Here we manually add the 'authorization' token with the email's token. Because the Interceptor adds the local storage token
   }
-
 
 }

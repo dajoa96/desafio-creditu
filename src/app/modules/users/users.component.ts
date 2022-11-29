@@ -207,7 +207,7 @@ export class UsersComponent implements OnInit {
             this.errorHandler(error.message || error);
           }
         },
-        error: (err) => {
+        error: () => {
           this.errorHandler();
        }
       });

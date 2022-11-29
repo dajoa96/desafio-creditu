@@ -33,4 +33,5 @@ export class HeaderComponent implements OnInit {
     this.userService.clearToken();
     this.router.navigate(['/home']);
   }
+
 }
