@@ -38,7 +38,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   async onNewParams() {
-    console.log('buscar', this.params);
     this.showLoader = true;
     let searchParams: any = { page: this.data.pagination.currentPage }
     if (this.params?.search && this.params?.search !== '') searchParams.search = this.params?.search;
@@ -48,7 +47,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       if (res.status.toLowerCase() === 'success' && Array.isArray(res.data.users)) {       //So we can wait for the data to be available
         this.data.list = res.data.users;
         this.data.pagination = res.data.pagination;
-        console.log(this.data)
         this.bhData.next(this.data);
       }
       this.showLoader = false;

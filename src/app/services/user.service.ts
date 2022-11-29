@@ -50,7 +50,6 @@ export class UserService {
       this.isLogged.next(true);
       return true;
     } catch (error) {
-      console.log('fallo o no hay token', error); // Only for testing
       this.clearToken();
       return false;
     }

@@ -64,7 +64,6 @@ export class ResetPasswordComponent implements OnInit {
         this.isSent = false;
       }
       this.decodedToken = this.jwtHelper.decodeToken(this.token);
-      console.log(this.decodedToken);
     } catch (error) {
       this.token = undefined;
       this.errorMessage = "Invalid recovery token, please re-send the recovery email";
@@ -105,11 +104,8 @@ export class ResetPasswordComponent implements OnInit {
       const fd: any = new FormData();
       if (this.decodedToken && this.decodedToken?._id && this.decodedToken !== '') fd.append('_id', this.decodedToken?._id);
       if (this.resetPasswordForm.get('password')?.value && this.resetPasswordForm.get('password')?.value !== '') fd.append('password', this.resetPasswordForm.get('password')?.value);
-      console.log(this.token);
-      console.log(Object.fromEntries(fd));
       this.authService.updatePassword(this.token, fd).pipe(first()).subscribe({
         next: (res: any) => {
-          console.log(res);
           try {
             if (res.status.toLowerCase() != 'success') {
               if (res.code === 502) throw new Error("An error has ocurred, password not updated");

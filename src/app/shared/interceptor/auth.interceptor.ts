@@ -25,7 +25,6 @@ export class AuthInterceptor implements HttpInterceptor {
             authorization: token                                                                        //We set the Authorization header with our JWT
           }
         });
-        console.log(request)
       };
     }
     return next.handle(request);

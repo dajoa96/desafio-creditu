@@ -7,7 +7,6 @@ import { first, throwError } from 'rxjs';
 import { RegisterRequestModel } from 'src/app/models/user-requests.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
-import { EmailIsTaken } from 'src/app/shared/validators/email-is-taken.validator';
 import { MustMatch } from 'src/app/shared/validators/must-match-validator';
 
 @Component({
@@ -68,11 +67,9 @@ export class RegisterComponent implements OnInit {
         nickname: this.registerForm.get('nickname')?.value,
         password: this.registerForm.get('password')?.value
       }
-      console.log(data);
       this.spinner.show();
       this.authService.signUp(data).pipe(first()).subscribe({
         next: (res) => {
-          console.log(res);
           try {
             if (res.status.toLowerCase() != 'success') {
               if (res.error == "duplicated-email") throw new Error("Email is already taken");
@@ -88,12 +85,9 @@ export class RegisterComponent implements OnInit {
           }
         },
         error: (err) => {
-          console.log(err);
           this.errorHandler();
         }
       });
-      // this.userService.setToken(JSON.stringify(this.registerForm.value));         //Only for Testing
-      // if (this.userService.checkToken()) this.router.navigate(['/home'])       //Only for Testing
     }
   }
 
