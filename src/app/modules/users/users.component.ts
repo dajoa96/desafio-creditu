@@ -5,7 +5,6 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NotifierService } from 'angular-notifier';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { first, firstValueFrom } from 'rxjs';
-import { LoginRequestModel } from 'src/app/models/user-requests.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { CheckDialogModalComponent } from 'src/app/shared/modal/check-dialog-modal/check-dialog-modal.component';
@@ -46,15 +45,7 @@ export class UsersComponent implements OnInit {
         [this.userService.validateNickname.bind(this.userService)]
       ],
       gameType: [null, [Validators.required]],
-      avatar: [null, [
-        (control: AbstractControl): {[key: string]: boolean} | null => {
-          const validImageType: string[] = ['image/jpg', 'image/jpeg', 'image/png'];
-          if (!control?.value) return null;
-          if (!control?.value?.type.toLowerCase().includes('image') || !validImageType.includes(control?.value?.type.toLowerCase())) return { invalidImageType: true } //If the image is not a .jpg, .jpeg or .png file, error
-          if (control?.value?.size > 2097152) return { invalidImageSize: true } //If the image is larger than 2MB
-          return null;
-        }
-      ]],
+      avatar: [null, [this.ProfileImageValidator]],
       password: ['', [Validators.minLength(4), Validators.maxLength(32)]],
       repeatPassword: ['', []]
     },
@@ -65,9 +56,17 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('valid', this.userForm.valid)
-    console.log('pristine',this.userForm.pristine)
     this.getUserData();
+  }
+
+  get ProfileImageValidator() {
+    return (control: AbstractControl): {[key: string]: boolean} | null => {
+      const validImageType: string[] = ['image/jpg', 'image/jpeg', 'image/png'];
+      if (!control?.value) return null;
+      if (!control?.value?.type.toLowerCase().includes('image') || !validImageType.includes(control?.value?.type.toLowerCase())) return { invalidImageType: true } //If the image is not a .jpg, .jpeg or .png file, error
+      if (control?.value?.size > 2097152) return { invalidImageSize: true } //If the image is larger than 2MB
+      return null;
+    }
   }
 
   get fc(): any {
@@ -96,7 +95,6 @@ export class UsersComponent implements OnInit {
       this.errorMessage = "An error has ocurred, please try again";
       this.showLoader = false;
     }
-    console.log(this.userData)
   }
 
   onFileSelected(event: any) {
@@ -146,16 +144,13 @@ export class UsersComponent implements OnInit {
     const res = await firstValueFrom(modalRef.closed);
     if (res) {
       this.spinner.show();
-      //ToDo logica de eliminar user
       this.authService.removeUser(this.userData?._id).pipe(first()).subscribe({
         next: (resp) => {
-          console.log(resp)
           try {
             if (resp.status.toLowerCase() !== 'success') {
               if (resp.code === 502) throw new Error("An error has ocurred, user not deleted");
               throw new Error("An unknown error has ocurred, user not deleted");
             } else {
-              //Success
               this.notifierService.notify('success', "Your user was successfully deleted, we hope to see you back soon!");
               this.userService.clearToken();
               this.router.navigate(['/home']);
@@ -165,11 +160,8 @@ export class UsersComponent implements OnInit {
             this.errorHandler(error.message || error);
           }
         },
-        error: (err) => {
-          console.log(err)
+        error: () => {
           this.errorHandler();
-          // this.userService.clearToken();
-          // this.router.navigate(['/login']);
         }
       });
     }
@@ -197,7 +189,6 @@ export class UsersComponent implements OnInit {
       if (this.userForm?.value?.avatar) fd.append('avatar', this.userForm?.value?.avatar);
       this.authService.updateUser(fd).pipe(first()).subscribe({
         next: (res) => {
-          console.log(res);
           try {
             if (res.status.toLowerCase() !== 'success') {
               if (res.code === 502) throw new Error("An error has ocurred, user not updated");
