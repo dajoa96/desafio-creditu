@@ -57,7 +57,8 @@ export class SearchDropdownComponent implements OnInit, OnDestroy {
   onSelect(val: any) {
     if (!val) return;
     this.currentFilter = val;
-    this.searchForm.get('gameType')?.setValue(this.currentFilter.value)
+    this.searchForm.get('gameType')?.setValue(this.currentFilter.value);
+    this.onSearch();
   }
 
 }
