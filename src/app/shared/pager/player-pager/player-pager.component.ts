@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NotifierService } from 'angular-notifier';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { SearchFilterModel } from 'src/app/models/search-filter.model';
@@ -18,6 +19,7 @@ export class PlayerPagerComponent implements OnInit, OnDestroy {
   @Output('onNewPage') onNewPage: EventEmitter<number> = new EventEmitter<number>();
   list?: any[];
   currentPage: number = 1;
+  hideRankign: boolean = false;
   totalPages: number = 0;
   totalElements: number = 0;
   pageSize: number = 10;
@@ -43,7 +45,8 @@ export class PlayerPagerComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
-    private readonly notifierService: NotifierService
+    private readonly notifierService: NotifierService,
+    private readonly route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -53,6 +56,12 @@ export class PlayerPagerComponent implements OnInit, OnDestroy {
       },
       error: () => {
         this.notifierService.notify('error', 'An error has ocurred, please try again');
+      }
+    });
+
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (res: any) => {
+        (res?.search && res?.search !== '') || (res?.gameType && res?.gameType !== '') ? this.hideRankign = true : this.hideRankign = false;
       }
     })
   }

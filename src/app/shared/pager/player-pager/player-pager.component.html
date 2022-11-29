@@ -37,7 +37,7 @@
             <th>Avatar</th>
             <th>Nickname</th>
             <th>Game Type</th>
-            <th>Ranking</th>
+            <th *ngIf="(!showHallOfFame && !hideRankign) || showHallOfFame">Ranking</th>
           </thead>
           <tbody>
             <ng-container *ngIf="!list">
@@ -98,7 +98,7 @@
                     {{ getGameType(item?.gameType) }}
                   </div>
                 </td>
-                <td>
+                <td *ngIf="!hideRankign">
                   <div class="player-ranking">
                     {{ item?.ranking }}
                   </div>
