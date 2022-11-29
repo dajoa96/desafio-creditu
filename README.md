@@ -1,27 +1,38 @@
-# DesafioCreditu
+# Kraken Race
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.1.
+Interfaz gráfica (Front End) de la aplicación Kraken Race (https://krakentechstudios.com/kraken-race). Cualquier cambio al código principal debe realizarse en la rama `dev`.
 
-## Development server
+Para agregar más caracteriticas al código, se debe crear una rama hija de la rama `dev`; una vez terminados los cambios y aprobados los mismos; hacer `merge` a la rama `dev` para realizar pruebas previas a la puesta producción. Hacer `merge` a la rama `master` una vez sea aprobada la puesta en marcha en producción del código.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Este proyecto fué generado con el [Angular CLI](https://github.com/angular/angular-cli), en su versión 13.0.1.
 
-## Code scaffolding
+## Descargar el proyecto
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Correr `git clone https://github.com/dajoa96/desafio-creditu.git` para clonar el código a un directorio.
+
+## Instalar las dependencias necesarias para correr el proyecto
+
+Correr `npm install` para instalar las dependencias del proyecto, las cuales son definidas en el package.json.
+
+## Desplegar el servidor de pruebas
+
+Correr `ng serve` para generar un server de pruebas. Ingrear a la URL `http://localhost:4200/` para visualizar la aplicación. Notese que al modificar alguno de los archivos del proyecto, la aplicación se re-compilará de manera automática.
+
+## Scaffolding del código, generar componentes, directivas, pipes, servicios, clases, guards, interfaces enums y/o módulos
+
+Correr `ng generate component nombre-del-component` para generar un componente, Adicionalmente, se pueden generar: `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Correr `ng build` para generar un build (o contruir) del proyecto. Los resultados de la compilación serán guardados en el directorio de `dist/`.
 
-## Running unit tests
+## Para Test Unitarios
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Correr `npm run test` Para ejecutar los test unitarios via [Jest](https://jestjs.io/).
+Correr `npm run test:watch` Para ejecutar los test unitarios y mantener escuchando por cambios de manera continua (Recomendado solo para desarrollo).
+Correr `npm run test:coverage` Para ejecutar los test unitarios y generar un informe de coverage.
+Correr `npm run test:watch-coverage` Para ejecutar los test unitarios, mantener escuchando por cambios de manera continua y generar un informe de coverage.
 
-## Running end-to-end tests
+## Ayuda adicional
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Para obtener ayuda adicional acerca del CLI de Angular correr `ng help` o leer la documentación (en inglés) de [Angular CLI Overview and Command Reference](https://angular.io/cli).
