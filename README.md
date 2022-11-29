@@ -1,6 +1,6 @@
 # Kraken Race
 
-Interfaz gráfica (Front End) de la aplicación Kraken Race (https://krakentechstudios.com/kraken-race). Cualquier cambio al código principal debe realizarse en la rama `dev`.
+Interfaz gráfica (Front End) de la aplicación web [Kraken Race](https://krakentechstudios.com/kraken-race). Cualquier cambio al código principal debe realizarse en la rama `dev`.
 
 Para agregar más caracteriticas al código, se debe crear una rama hija de la rama `dev`; una vez terminados los cambios y aprobados los mismos; hacer `merge` a la rama `dev` para realizar pruebas previas a la puesta producción. Hacer `merge` a la rama `master` una vez sea aprobada la puesta en marcha en producción del código.
 
